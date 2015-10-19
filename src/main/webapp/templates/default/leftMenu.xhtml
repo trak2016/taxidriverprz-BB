@@ -1,0 +1,40 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+    <h:form>
+        <ul class="nav nav-sidebar">
+            <li class="menu-header-menu disabled"><h:commandLink
+                    value="Witaj #{navRule.loggedUser().getName()} #{navRule.loggedUser().getLastName()}"/></li>
+        </ul>
+        <p:accordionPanel multiple="true">
+            <p:tab title="Admin" rendered="#{request.isUserInRole('ROLE_ADMIN')}">
+                <ul class="nav nav-sidebar">
+                    <li class="disabled" style="background-color: #cccccc"><a href="#">Company</a></li>
+                    <li><h:commandLink value="Company List" action="#{navRule.moveToCompanyList()}"/></li>
+                    <li class="disabled" style="background-color: #cccccc"><a href="#">User</a></li>
+                    <li><h:commandLink value="User List" action="#{navRule.moveToUserList()}"/></li>
+                </ul>
+            </p:tab>
+            <p:tab title="Owner" rendered="#{request.isUserInRole('ROLE_OWNER')}">
+                <ul class="nav nav-sidebar">
+                    <li><h:commandLink value="My Companies" action="#{navRule.moveToOwnerCompanies()}"/></li>
+                    <li><h:commandLink value="Employees List" action="#{navRule.moveToOwnerEmployeesList()}"/></li>
+                    <li><h:commandLink value="My Cabs" action="#{navRule.moveToOwnerCompanyCabsList()}"/></li>
+                </ul>
+            </p:tab>
+            <p:tab title="Dispatcher"
+                   rendered="#{request.isUserInRole('ROLE_OWNER') or request.isUserInRole('ROLE_DISPATCHER')}">
+                <ul class="nav nav-sidebar">
+                    <li class="disabled" style="background-color: #cccccc"><a href="#">Map</a></li>
+                    <li><h:commandLink value="Map" action="#{navRule.moveMap()}"/></li>
+                    <li class="disabled" style="background-color: #cccccc"><a href="#">Courses</a></li>
+                    <li><h:commandLink value="Course List" action="#{navRule.moveToCourseList()}"/></li>
+                </ul>
+            </p:tab>
+        </p:accordionPanel>
+    </h:form>
+</ui:composition>
+</html>

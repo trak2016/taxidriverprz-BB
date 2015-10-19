@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<f:view>
+    <ui:composition template="/templates/default/main.xhtml">
+        <ui:define name="content">
+
+                <p:panel id="pnl" header="Map" style="margin-bottom:10px;min-width: 1200px;">
+                    <h:panelGrid columns="1" width="100%" cellpadding="20">
+                        <h:panelGrid columns="4" style="margin-bottom:10px" cellpadding="5" columnClasses="centered,centered,centered,centered">
+                            <p:outputLabel for="address" value="Address: "/>
+                            <p:inputText id="address"/>
+                            <p:commandButton value="Search" icon="ui-icon-search" onclick="geocode()" type="button"/>
+                            <p:ajaxStatus>
+                                <f:facet name="start">
+                                    <h:graphicImage library="image" name="load.gif" />
+                                </f:facet>
+
+                                <f:facet name="complete">
+                                    <h:graphicImage library="image" name="checkBlue.png" />
+                                </f:facet>
+                            </p:ajaxStatus>
+                        </h:panelGrid>
+
+                        <p:growl id="messages" showDetail="true"/>
+
+                        <p:gmap id="geoGmap" widgetVar="geoMap" center="#{mapView.centerMap}" zoom="13" type="ROADMAP"
+                                model="#{mapView.mapModel}" style="width:100%;height:770px">
+                            <p:ajax event="overlaySelect" listener="#{mapView.onMarkerSelect}"/>
+                            <p:ajax event="geocode" listener="#{mapView.onGeocode}" update="@this"/>
+
+                            <p:gmapInfoWindow id="infoWindow">
+                                <h:outputText value="#{mapView.selectedCar.getPlateNumber()}"/>
+                                <br/>
+                                <h:outputText value="#{mapView.selectedCar.getBrandModel()}"/>
+                                <br/>
+                                <h:outputText value="#{mapView.marker.data}"/>
+                                <br/>
+                                <p:commandButton  value="Add course" update="courseDetail" icon="ui-icon-search"
+                                                  oncomplete="PF('courseDialog').show()"/>
+                            </p:gmapInfoWindow>
+                        </p:gmap>
+
+                        <p:dialog header="Course Info" widgetVar="courseDialog" modal="true" showEffect="fade"
+                                  hideEffect="fade" resizable="false">
+                            <p:outputPanel id="courseDetail" style="text-align:center;">
+                                <p:panelGrid columns="2"
+                                             columnClasses="value,value">
+
+                                    <h:outputText value="Id:"/>
+                                    <h:outputText value="#{mapView.selectedCar.getPlateNumber()}"/>
+
+                                    <h:outputText value="Name"/>
+                                    <h:outputText value="#{mapView.selectedCar.getBrandModel()}"/>
+
+                                    <h:outputText value="Driver"/>
+                                    <h:outputText
+                                            value="#{mapView.selectedCar.driver.getName()} #{mapView.selectedCar.driver.getLastName()}"/>
+
+                                    <h:outputText value="Client phone number"/>
+                                    <h:inputText value="#{mapView.course.customerPhoneNumber}"/>
+
+                                    <h:outputText/>
+                                    <h:form>
+                                    <p:commandButton id="addCourse" value="Add" action="#{mapView.addCourse()}"
+                                                     ajax="false"/>
+                                    <p:commandButton id="cancel" value="Cancel" onclick="PF('courseDialog').close()"
+                                                     action="#{mapView.resetSelect()}" ajax="false"/>
+                                    </h:form>
+                                </p:panelGrid>
+                            </p:outputPanel>
+                        </p:dialog>
+                    </h:panelGrid>
+                </p:panel>
+            
+            <h:form rendered="#{mapView.searched}">
+                <p:panel id="pn2" header="Car list" style="margin-bottom:10px;min-width: 1200px;">
+                    <h:panelGrid columns="1" cellpadding="20">
+                        <p:contextMenu for="free_cabs">
+                            <p:menuitem value="Add course" update="courseDetail" icon="ui-icon-search"
+                                        oncomplete="PF('courseDialog').show()"/>
+                        </p:contextMenu>
+                        <p:dataTable id="free_cabs" value="#{mapView.getSortedFreeCabsList()}" var="car" rowKey="#{car.id}"
+                                     selection="#{mapView.selectedCar}" selectionMode="single">
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Plate number"/>
+                                </f:facet>
+                                <h:outputText value="#{car.plateNumber}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Model"/>
+                                </f:facet>
+                                <h:outputText value="#{car.brandModel}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Capacity"/>
+                                </f:facet>
+                                <h:outputText value="#{car.capacity}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Status"/>
+                                </f:facet>
+                                <h:outputText value="#{car.status}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="No of seats"/>
+                                </f:facet>
+                                <h:outputText value="#{car.numberOfSeats}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Company"/>
+                                </f:facet>
+                                <h:outputText value="#{car.company.name}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Driver"/>
+                                </f:facet>
+                                <h:outputText value="#{car.driver.name} #{car.driver.lastName}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Arivval time"/>
+                                </f:facet>
+                                <h:outputText value="#{car.time}"/>
+                            </p:column>
+
+                        </p:dataTable>
+                    </h:panelGrid>
+                </p:panel>
+            </h:form>
+
+            <script type="text/javascript">
+                function geocode() {
+                    PF('geoMap').geocode(document.getElementById('address').value);
+                }
+            </script>
+        </ui:define>
+    </ui:composition>
+</f:view>
+</html>

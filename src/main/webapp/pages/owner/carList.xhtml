@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<f:view>
+    <h:outputLabel value="Hello, world"/>
+</f:view>
+<h:body>
+    <f:metadata>
+        <f:event type="preRenderView" listener="#{carMB.onStartup()}"/>
+    </f:metadata>
+    <ui:composition template="/templates/default/main.xhtml">
+        <ui:define name="content">
+
+
+            <div align="right">
+                <p:commandButton value="Add car" type="button" onclick="PF('AddDlg').show();"/>
+            </div>
+
+            <br></br>
+
+            <p:panel id="pnl" header="Car list" style="margin-bottom:10px;min-width: 980px;">
+                <h:panelGrid columns="1" cellpadding="20">
+                    <h:form id="form">
+                        <p:contextMenu for="cars">
+                            <p:menuitem value="Edit" update="carEdit" icon="ui-icon-pencil"
+                                        oncomplete="PF('carEdit').show()"/>
+                            <p:menuitem value="Show statistics" update="carStats" icon="ui-icon-info"
+                                        oncomplete="PF('carStats').show()"/>
+                            <p:menuitem value="Delete" update="cars" icon="ui-icon-close"
+                                        actionListener="#{carMB.deleteCar()}">
+                                <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-alert"/>
+                            </p:menuitem>
+                        </p:contextMenu>
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes"
+                                             icon="ui-icon-check"/>
+                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no"
+                                             icon="ui-icon-close"/>
+                        </p:confirmDialog>
+
+                        <p:dataTable id="cars" value="#{carMB.carList}" var="car" rowKey="#{car.id}"
+                                     selection="#{carMB.selectedCar}" selectionMode="single" widgetVar="carsTable">
+                            <p:column filterBy="#{car.plateNumber}" filterMatchMode="contains">
+                                <f:facet name="header">
+                                    <h:outputText value="Plate number"/>
+                                </f:facet>
+                                <h:outputText value="#{car.plateNumber}"/>
+                            </p:column>
+                            <p:column filterBy="#{car.brandModel}" filterMatchMode="contains">
+                                <f:facet name="header">
+                                    <h:outputText value="Model"/>
+                                </f:facet>
+                                <h:outputText value="#{car.brandModel}"/>
+                            </p:column>
+                            <p:column filterBy="#{car.capacity}" filterMatchMode="contains">
+                                <f:facet name="header">
+                                    <h:outputText value="Capacity"/>
+                                </f:facet>
+                                <h:outputText value="#{car.capacity}"/>
+                            </p:column>
+                            <p:column filterBy="#{car.status}" filterMatchMode="contains">
+                                <f:facet name="header">
+                                    <h:outputText value="Status"/>
+                                </f:facet>
+                                <h:outputText value="#{car.status}"/>
+                            </p:column>
+                            <p:column filterBy="#{car.numberOfSeats}" filterMatchMode="contains">
+                                <f:facet name="header">
+                                    <h:outputText value="No of seats"/>
+                                </f:facet>
+                                <h:outputText value="#{car.numberOfSeats}"/>
+                            </p:column>
+
+                            <p:column filterBy="#{car.company}" filterMatchMode="contains">
+                                <f:facet name="filter">
+                                    <p:selectOneMenu onchange="PF('carsTable').filter()">
+                                        <f:selectItem itemLabel="--Company--" itemValue="#{null}"
+                                                      noSelectionOption="true"/>
+                                        <f:selectItems value="#{carMB.getCompanyListByLoggedUser()}" var="company"
+                                                       itemValue="#{company}"
+                                                       itemLabel="#{company.name}" noSelectionOption="false"/>
+                                    </p:selectOneMenu>
+                                </f:facet>
+                                <h:outputText value="#{car.company.name}"/>
+                            </p:column>
+                            <p:column filterBy="#{car.driver.lastName}" filterMatchMode="contains">
+                                <f:facet name="header">
+                                    <h:outputText value="Driver"/>
+                                </f:facet>
+                                <h:outputText value="#{car.driver.name} #{car.driver.lastName}"/>
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+
+                    <p:dialog header="Car Edit" widgetVar="carEdit" modal="true" showEffect="fade" hideEffect="fade"
+                              resizable="false" dynamic="true">
+                        <p:outputPanel id="carEdit" style="text-align:center;">
+                            <h:form>
+                                <p:panelGrid columns="2" rendered="#{not empty carMB.selectedCar}"
+                                             columnClasses="value,value">
+                                    <h:outputText value="Plate number"/>
+                                    <h:inputText value="#{carMB.selectedCar.plateNumber}"/>
+
+                                    <h:outputText value="Brand model"/>
+                                    <h:inputText value="#{carMB.selectedCar.brandModel}"/>
+
+                                    <h:outputText value="Type"/>
+                                    <h:inputText value="#{carMB.selectedCar.capacity}"/>
+
+                                    <h:outputText value="Number of seats"/>
+                                    <h:inputText value="#{carMB.selectedCar.numberOfSeats}"/>
+
+                                    <h:outputText value="Company name"/>
+                                    <h:selectOneMenu id="_company_" value="#{carMB.selectedCompany}"
+                                                     converter="#{entityConverter}"
+                                                     style="width:195px">
+                                        <f:selectItem itemValue="#{null}" itemLabel="--select--"/>
+                                        <f:selectItems value="#{carMB.getCompanyListByLoggedUser()}" var="company"
+                                                       itemValue="#{company}"
+                                                       itemLabel="#{company.name}" noSelectionOption="false"/>
+                                    </h:selectOneMenu>
+
+                                    <p:commandButton id="updateCar" value="Update" action="#{carMB.updateCar()}"
+                                                     ajax="false"/>
+                                    <p:commandButton id="cancel" value="Cancel" onclick="PF('carEdit').close()"
+                                                     action="#{carMB.reset()}" ajax="false"/>
+
+                                </p:panelGrid>
+                            </h:form>
+                        </p:outputPanel>
+                    </p:dialog>
+
+                    <p:dialog header="Car Statistic" widgetVar="carStats" modal="true" showEffect="fade"
+                              hideEffect="fade"
+                              resizable="false" width="70%" dynamic="true">
+                        <p:outputPanel id="carStats" style="text-align:center;"
+                                       rendered="#{not empty carMB.selectedCar}">
+
+                            <p:chart type="bar" model="#{carMB.multiAxisModel}"
+                                     style="height:400px; width: 100%; min-width:360px;"/>
+
+                        </p:outputPanel>
+                    </p:dialog>
+                </h:panelGrid>
+            </p:panel>
+
+            <h:form>
+                <p:dialog header="Add car" widgetVar="AddDlg" modal="true" height="300">
+                    <h:panelGrid columns="3" cellpadding="20">
+
+                        <h:outputLabel for="plateNumber" value="License plate : "/>
+                        <p:inputText id="plateNumber" value="#{carMB.car.plateNumber}"
+                                     validatorMessage="Plate number shall not be shorter than 7 alphanumeric sings">
+                            <f:validateLength minimum="7"/>
+                            <f:validateRequired/>
+                            <p:ajax event="blur" update="plateNbMsg"/>
+                        </p:inputText>
+                        <p:message id="plateNbMsg" for="plateNumber"/>
+
+
+                        <h:outputLabel for="brandModel" value="Brand and model : "/>
+                        <p:inputText id="brandModel" value="#{carMB.car.brandModel}"
+                                     validatorMessage="Brand and model are required">
+                            <f:validateLength minimum="3"/>
+                            <f:validateRequired/>
+                            <p:ajax event="blur" update="brandModelMsg"/>
+                        </p:inputText>
+                        <p:message id="brandModelMsg" for="brandModel"/>
+
+
+                        <h:outputLabel for="capacity" value="Capacity : "/>
+                        <p:inputText id="capacity" value="#{carMB.car.capacity}" validatorMessage="Capacity shall not be smaller than 100">
+                            <f:validateLength minimum="3"/>
+                            <f:validateRequired/>
+                            <p:ajax event="blur" update="capacityMsg"/>
+                        </p:inputText>
+                        <p:message id="capacityMsg" for="capacity"/>
+
+
+                        <h:outputLabel for="nbOfSeats" value="Number of seats : "/>
+                        <p:inputText id="nbOfSeats" value="#{carMB.car.numberOfSeats}"
+                                     validatorMessage="Number of seats is required">
+                            <f:validateLength minimum="1"/>
+                            <f:validateRequired/>
+                            <p:ajax event="blur" update="nbOfSeatsMsg"/>
+                        </p:inputText>
+                        <p:message id="nbOfSeatsMsg" for="nbOfSeats"/>
+
+
+                        <p:outputLabel for="dob" value="Date of production:"/>
+                        <p:calendar id="dob" value="#{carMB.car.yearOfProd}" required="true"
+                                    requiredMessage="Pick valid date" navigator="true" pattern="dd.MM.yyyy"/>
+                        <p:outputLabel/>
+
+                        <p:outputLabel for="company_" value="Company: "/>
+
+                        <h:selectOneMenu id="company_" value="#{carMB.selectedCompany}" converter="#{entityConverter}"
+                                         style="width:200px" required="true" requiredMessage="Please select the company">
+                            <p:ajax listener="#{carMB.getEmployeeListForSelectedCompany()}" update="user_"/>
+                            <f:selectItem itemValue="#{null}" itemLabel="--select--" noSelectionOption="true"/>
+                            <f:selectItems value="#{carMB.getCompanyListByLoggedUser()}" var="company"
+                                           itemValue="#{company}"
+                                           itemLabel="#{company.name}" noSelectionOption="false"/>
+                            <f:validateRequired/>
+                        </h:selectOneMenu>
+                        <p:message for="company_"/>
+
+
+                        <p:outputLabel for="user_" value="User: "/>
+
+                        <h:selectOneMenu id="user_" value="#{carMB.selectedUser}" converter="#{entityConverter}"
+                                         style="width:200px" required="true" requiredMessage="Please select the user">
+                            <f:selectItem itemValue="#{null}" itemLabel="--select--" noSelectionOption="true"/>
+                            <f:selectItems value="#{carMB.employeeList}" var="_user" itemValue="#{_user}"
+                                           itemLabel="#{_user.name} #{_user.lastName}" noSelectionOption="false"/>
+                            <f:validateRequired/>
+                        </h:selectOneMenu>
+                        <p:message for="user_"/>
+                    </h:panelGrid>
+                    <br></br>
+                    <p:commandButton id="addCar" value="Add" action="#{carMB.addCar()}" ajax="false"
+                                     validateClient="true"/>
+                    <p:commandButton id="reset" value="Reset" action="#{carMB.reset()}" ajax="false"/>
+
+                </p:dialog>
+            </h:form>
+
+        </ui:define>
+    </ui:composition>
+</h:body>
+</html>

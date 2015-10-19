@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"
+      xmlns:h="http://java.sun.com/jsf/html">
+<head>
+    <title>Access Denied!!!</title>
+</head>
+<body>
+<h1>Error 403</h1>
+<h:outputText value="Access Denied!!!" styleClass="header"/>
+<br/><br/>
+<h:outputText style="font-size: xx-large"
+        value="Hi #{navRule.loggedUser().getName()} #{navRule.loggedUser().getLastName()}. "/>
+<br/><br/>
+<br/><br/>
+<h:outputText style="font-size: x-large" value="You don't have sufficient rights to view the page you're requesting,
+            contact your administrator if you need access!!"/>
+<h:messages/>
+<h:form>
+    <!--<h:commandLink value="Back to Index." action="/pages/index.xhtml"/>-->
+    <input type="button" value="Back to prevoius page." onclick="history.back()"/>
+</h:form>
+</body>
+</html>

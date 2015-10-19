@@ -1,0 +1,1 @@
+ALTER TABLE public.usr ADD active BOOLEAN DEFAULT TRUE  NULL;

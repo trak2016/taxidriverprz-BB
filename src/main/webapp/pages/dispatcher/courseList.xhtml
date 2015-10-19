@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+
+</h:head>
+<h:body>
+    <ui:composition template="/templates/default/main.xhtml">
+        <ui:define name="content">
+
+
+                <p:panel id="pnl" header="Courses list" style="margin-bottom:10px;min-width: 600px;">
+                    <h:panelGrid columns="1" cellpadding="20">
+                        <h:form id="form" rendered="#{request.isUserInRole('ROLE_OWNER')}">
+                        <p:contextMenu for="courses">
+                            <p:menuitem value="View" update="courseDetail" icon="ui-icon-search"
+                                        oncomplete="PF('courseDialog').show()"/>
+                        </p:contextMenu>
+
+                        <p:selectOneMenu id="menu" value="#{courseMB.companyId}" style="width:150px">
+                            <f:event type="postAddToView" listener="#{courseMB.getCompaniesByLoggedUser()}"/>
+                            <f:selectItem itemLabel="Select Company" itemValue=""/>
+                            <f:selectItems value="#{courseMB.companyList}" var="d" itemValue="#{d.id}" itemLabel="#{d.name}"/>
+                            <p:ajax update="form" listener="#{courseMB.getCoursesByCompany()}"/>
+                        </p:selectOneMenu>
+
+                        <p:dataTable id="courses" value="#{courseMB.courseList}" var="course" rowKey="#{course.id}"
+                                     selection="#{courseMB.selectedCourse}" selectionMode="single">
+                            <p:column filterBy="#{course.user.lastName}" filterMatchMode="contains">
+                                <f:facet name="header">
+                                    <h:outputText value="Driver"/>
+                                </f:facet>
+                                <h:outputText
+                                        value="#{course.user.name.concat(' ').concat(course.user.lastName)}"/>
+                            </p:column>
+                            <p:column filterBy="#{course.cost}" filterMatchMode="contains">
+                                <f:facet name="header">
+                                    <h:outputText value="Cost"/>
+                                </f:facet>
+                                <h:outputText value="#{course.cost}">
+                                    <f:convertNumber type="currency" currencySymbol="$"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column filterBy="#{course.distance}" filterMatchMode="contains">
+                                <f:facet name="header">
+                                    <h:outputText value="Distance"/>
+                                </f:facet>
+                                <h:outputText value="#{course.distance} km"/>
+                            </p:column>
+                            <p:column filterBy="#{course.date}" filterMatchMode="contains">
+                                <f:facet name="header">
+                                    <h:outputText value="Date"/>
+                                </f:facet>
+                                <h:outputText value="#{courseMB.dataFormater(course.date)}"/>
+                            </p:column>
+                        </p:dataTable>
+                        </h:form>
+
+
+
+                        <h:form id="form_dispatcher" rendered="#{request.isUserInRole('ROLE_DISPATCHER')}">
+
+                            <f:metadata>
+                                <f:event type="preRenderView" listener="#{courseMB.onStartup()}"/>
+                            </f:metadata>
+
+                            <p:contextMenu for="courses">
+                                <p:menuitem value="View" update="courseDetail" icon="ui-icon-search"
+                                            oncomplete="PF('courseDialog').show()"/>
+                            </p:contextMenu>
+
+                            <p:dataTable id="courses2" value="#{courseMB.courseList}" var="course" rowKey="#{course.id}"
+                                         selection="#{courseMB.selectedCourse}" selectionMode="single">
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Driver"/>
+                                    </f:facet>
+                                    <h:outputText
+                                            value="#{course.user.name.concat(' ').concat(course.user.lastName)}"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Cost"/>
+                                    </f:facet>
+                                    <h:outputText value="#{course.cost}">
+                                        <f:convertNumber type="currency" currencySymbol="$"/>
+                                    </h:outputText>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Distance"/>
+                                    </f:facet>
+                                    <h:outputText value="#{course.distance} km"/>
+                                </p:column>
+                                <p:column>
+                                    <f:facet name="header">
+                                        <h:outputText value="Date"/>
+                                    </f:facet>
+                                    <h:outputText value="#{courseMB.dataFormater(course.date)}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </h:form>
+                    <p:dialog header="Course Info" widgetVar="courseDialog" modal="true" showEffect="fade" hideEffect="fade"
+                              resizable="false">
+                        <p:outputPanel id="courseDetail" style="text-align:center;">
+                            <p:panelGrid columns="2" rendered="#{not empty courseMB.selectedCourse}"
+                                         columnClasses="value,value">
+
+                                <h:outputText value="Id:"/>
+                                <p:outputLabel value="#{courseMB.selectedCourse.id}"/>
+
+                                <h:outputText value="Driver"/>
+                                <p:outputLabel
+                                        value="#{courseMB.selectedCourse.user.name.concat(' ').concat(courseMB.selectedCourse.user.lastName)}"/>
+
+                                <h:outputText value="Cost"/>
+                                <h:outputText value="#{courseMB.selectedCourse.cost}">
+                                    <f:convertNumber type="currency" currencySymbol="$"/>
+                                </h:outputText>
+
+                                <h:outputText value="Distance"/>
+                                <p:outputLabel value="#{courseMB.selectedCourse.distance} km"/>
+
+                                <h:outputText value="Date"/>
+                                <p:outputLabel value="#{courseMB.dataFormater(courseMB.selectedCourse.date)}"/>
+
+                            </p:panelGrid>
+                        </p:outputPanel>
+                    </p:dialog>
+                </h:panelGrid>
+            </p:panel>
+
+        </ui:define>
+    </ui:composition>
+</h:body>
+</html>

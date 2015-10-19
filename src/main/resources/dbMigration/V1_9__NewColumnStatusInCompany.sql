@@ -1,0 +1,1 @@
+ALTER TABLE public.company ADD status BOOLEAN DEFAULT TRUE NULL;

@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+</h:head>
+
+<h:body>
+    <ui:composition template="/templates/default/main.xhtml">
+        <ui:define name="content">
+            <p:panel id="pnl" header="My companies" style="margin-bottom:10px;min-width: 600px;">
+                <h:panelGrid columns="1" cellpadding="20">
+                    <h:form id="form">
+                        <p:contextMenu for="companies">
+                            <p:menuitem value="View" update="companyDetail" icon="ui-icon-search"
+                                        oncomplete="PF('companyDialog').show()"/>
+                            <p:menuitem value="Edit" update="companyEdit" icon="ui-icon-pencil"
+                                        oncomplete="PF('companyEdit').show()"/>
+                            <p:menuitem value="Delete" update="companies" icon="ui-icon-close"
+                                        actionListener="#{companyMB.updateCompany()}">
+                                <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-alert"/>
+                            </p:menuitem>
+                        </p:contextMenu>
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes"
+                                             icon="ui-icon-check"/>
+                            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no"
+                                             icon="ui-icon-close"/>
+                        </p:confirmDialog>
+                        <p:dataTable id="companies" value="#{userMB.getUserCompanyList()}" var="userCompany"
+                                     rowKey="#{userCompany.id}"
+                                     selection="#{companyMB.selectedCompany}" selectionMode="single"
+                                     sortOrder="ascending">
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Company"/>
+                                </f:facet>
+                                <h:outputText value="#{userCompany.getName()}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="VAT ID"/>
+                                </f:facet>
+                                <h:outputText value="#{userCompany.getVatId()}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Address"/>
+                                </f:facet>
+                                <h:outputText value="#{userCompany.getAddress()}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="City"/>
+                                </f:facet>
+                                <h:outputText value="#{userCompany.getCity()}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="ZIP"/>
+                                </f:facet>
+                                <h:outputText value="#{userCompany.getZip()}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Country"/>
+                                </f:facet>
+                                <h:outputText value="#{userCompany.getCountry()}"/>
+                            </p:column>
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Phone"/>
+                                </f:facet>
+                                <h:outputText value="#{userCompany.getPhone()}"/>
+                            </p:column>
+                            <p:rowExpansion>
+                                <p:panelGrid columns="2" columnClasses="label,value" style="width:300px">
+
+                                    <h:outputText value="Logo"/>
+                                    <h:outputText value="$#{company.logo}"/>
+                                </p:panelGrid>
+                            </p:rowExpansion>
+                        </p:dataTable>
+                    </h:form>
+
+                    <p:dialog header="Company Info" widgetVar="companyDialog" modal="true" showEffect="fade"
+                              hideEffect="fade" resizable="false">
+                        <p:outputPanel id="companyDetail" style="text-align:center;">
+                            <p:panelGrid columns="2" rendered="#{not empty companyMB.selectedCompany}"
+                                         columnClasses="value,value">
+
+                                <h:outputText value="Name"/>
+                                <h:outputText value="#{companyMB.selectedCompany.getName()}"/>
+
+                                <h:outputText value="VAT ID"/>
+                                <h:outputText value="#{companyMB.selectedCompany.getVatId()}"/>
+
+                                <h:outputText value="Phone"/>
+                                <h:outputText value="#{companyMB.selectedCompany.getPhone()}"/>
+
+                                <h:outputText value="Address"/>
+                                <h:outputText value="#{companyMB.selectedCompany.getAddress()}"/>
+
+                                <h:outputText value="City"/>
+                                <h:outputText value="#{companyMB.selectedCompany.getCity()}"/>
+
+                                <h:outputText value="ZIP"/>
+                                <h:outputText value="#{companyMB.selectedCompany.getZip()}"/>
+
+                                <h:outputText value="Country"/>
+                                <h:outputText value="#{companyMB.selectedCompany.getCountry()}"/>
+                            </p:panelGrid>
+                        </p:outputPanel>
+                    </p:dialog>
+                    <p:dialog header="Company Edit" widgetVar="companyEdit" modal="true" showEffect="fade"
+                              hideEffect="fade"
+                              resizable="false">
+                        <p:outputPanel id="companyEdit" style="text-align:center;">
+                            <h:form>
+                                <p:panelGrid columns="2" rendered="#{not empty companyMB.selectedCompany}"
+                                             columnClasses="value,value">
+
+                                    <p:column>
+                                        <h:outputText value="Name"/>
+                                    </p:column>
+                                    <p:column>
+                                        <p:inputText id="name" value="#{companyMB.selectedCompany.name}"
+                                                     required="true">
+                                            <f:validateLength minimum="3"/>
+                                            <p:ajax event="blur" update="nameMsg"/>
+                                        </p:inputText>
+                                        <p:message id="nameMsg" for="name" display="icon"/>
+                                    </p:column>
+
+                                    <p:column>
+                                        <h:outputText value="VAT ID"/>
+                                    </p:column>
+                                    <p:column>
+                                        <p:inputText id="vatid" value="#{companyMB.selectedCompany.vatId}"
+                                                     required="true">
+                                            <f:validateLength minimum="3"/>
+                                            <p:ajax event="blur" update="vatidMsg"/>
+                                        </p:inputText>
+                                        <p:message id="vatidMsg" for="vatid" display="icon"/>
+                                    </p:column>
+
+                                    <p:column>
+                                        <h:outputText value="Phone"/>
+                                    </p:column>
+                                    <p:column>
+                                        <p:inputText id="phone" value="#{companyMB.selectedCompany.phone}"
+                                                     required="true">
+                                            <f:validateLength minimum="6"/>
+                                            <p:ajax event="blur" update="phoneMsg"/>
+                                        </p:inputText>
+                                        <p:message id="phoneMsg" for="phone" display="icon"/>
+                                    </p:column>
+
+                                    <p:column>
+                                        <h:outputText value="Address"/>
+                                    </p:column>
+                                    <p:column>
+                                        <p:inputText id="addres" value="#{companyMB.selectedCompany.address}"
+                                                     required="true">
+                                            <f:validateLength minimum="5"/>
+                                            <p:ajax event="blur" update="addresMsg"/>
+                                        </p:inputText>
+                                        <p:message id="addresMsg" for="addres" display="icon"/>
+                                    </p:column>
+
+                                    <p:column>
+                                        <h:outputText value="City"/>
+                                    </p:column>
+                                    <p:column>
+                                        <p:inputText id="city" value="#{companyMB.selectedCompany.city}"
+                                                     required="true">
+                                            <f:validateLength minimum="5"/>
+                                            <p:ajax event="blur" update="cityMsg"/>
+                                        </p:inputText>
+                                        <p:message id="cityMsg" for="city" display="icon"/>
+                                    </p:column>
+
+                                    <p:column>
+                                        <h:outputText value="ZIP"/>
+                                    </p:column>
+                                    <p:column>
+                                        <p:inputText id="zip" value="#{companyMB.selectedCompany.zip}"
+                                                     required="true">
+                                            <f:validateLength minimum="5"/>
+                                            <p:ajax event="blur" update="zipMsg"/>
+                                        </p:inputText>
+                                        <p:message id="zipMsg" for="zip" display="icon"/>
+                                    </p:column>
+
+                                    <p:column>
+                                        <h:outputText value="Country"/>
+                                    </p:column>
+                                    <p:column>
+                                        <p:inputText id="country" value="#{companyMB.selectedCompany.country}"
+                                                     required="true">
+                                            <f:validateLength minimum="5"/>
+                                            <p:ajax event="blur" update="countryMsg"/>
+                                        </p:inputText>
+                                        <p:message id="countryMsg" for="country" display="icon"/>
+                                    </p:column>
+
+                                    <p:column>
+                                        <h:outputText value="Logo"/>
+                                    </p:column>
+                                    <p:column>
+                                        <h:outputText value="#{companyMB.selectedCompany.logo}"/>
+                                    </p:column>
+
+                                    <p:commandButton id="addUser" value="Update" action="#{companyMB.updateCompany()}"
+                                                     ajax="false"/>
+                                    <p:commandButton id="cancel" value="Cancel" onclick="PF('companyEdit').close()"
+                                                     ajax="false"/>
+
+                                </p:panelGrid>
+                            </h:form>
+                        </p:outputPanel>
+                    </p:dialog>
+                </h:panelGrid>
+            </p:panel>
+
+        </ui:define>
+    </ui:composition>
+</h:body>
+
+</html>
