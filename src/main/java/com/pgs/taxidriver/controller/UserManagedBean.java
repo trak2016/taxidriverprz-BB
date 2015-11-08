@@ -69,6 +69,37 @@ public class UserManagedBean {
 
     private User activeUser;
 
+    public String getOldPassword() {
+        return oldPassword;
+    }
+
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
+    }
+
+    public String getNewPassword() {
+        return newPassword;
+    }
+
+    public void setNewPassword(String newPassword) {
+        this.newPassword = newPassword;
+    }
+
+    public String getNewPasswordRepeated() {
+        return newPasswordRepeated;
+    }
+
+    public void setNewPasswordRepeated(String newPasswordRepeat) {
+        this.newPasswordRepeated = newPasswordRepeat;
+    }
+
+    private String oldPassword;
+
+    private String newPassword;
+
+    private String newPasswordRepeated;
+
+
     public Set<Role> getRoleSet() {
         return roleSet;
     }
@@ -303,6 +334,7 @@ public class UserManagedBean {
             e.printStackTrace();
         }
     }
+
     /**
      * @param data
      * @return data in expected format
@@ -383,12 +415,11 @@ public class UserManagedBean {
     public List<Role> findAllRoles() {
         List<UserRole> userRolesTemp = navigationRule.loggedUser().getRoles();
 
-        if((userRolesTemp.stream().filter(x-> Objects.equals(x.getRole().getName(), "ROLE_ADMIN")).collect(Collectors.toList())).size() != 0){
+        if ((userRolesTemp.stream().filter(x -> Objects.equals(x.getRole().getName(), "ROLE_ADMIN")).collect(Collectors.toList())).size() != 0) {
             return roleService.findAll();
-        }
-        else{
+        } else {
             List<Role> allRoles = roleService.findAll();
-            allRoles.removeIf(x-> Objects.equals(x.getName(), "ROLE_ADMIN"));
+            allRoles.removeIf(x -> Objects.equals(x.getName(), "ROLE_ADMIN"));
 
             return allRoles;
         }
@@ -396,7 +427,7 @@ public class UserManagedBean {
 
     }
 
-    public List<Role> findOtherRoles(Long id){
+    public List<Role> findOtherRoles(Long id) {
         List<Role> allRoles = findAllRoles();
 
         List<UserRole> userRolesTemp = userRoleService.findRoleBySelectedUser(id);
@@ -406,14 +437,13 @@ public class UserManagedBean {
         return allRoles;
     }
 
-    public Set<UserRole> findRoleBySelectedUser(Long id){
+    public Set<UserRole> findRoleBySelectedUser(Long id) {
         List<UserRole> temp = userRoleService.findRoleBySelectedUser(id);
         this.userRoles = new HashSet<UserRole>(temp);
-        if(this.userRoles != null && !this.userRoles.equals("")) {
+        if (this.userRoles != null && !this.userRoles.equals("")) {
             getEmployeesByCompany();
             return this.userRoles;
-        }
-        else{
+        } else {
             return this.userRoles = new HashSet<UserRole>();
         }
     }
@@ -429,4 +459,25 @@ public class UserManagedBean {
         }
     }
 
+    public void chnageUserPassword() {
+        boolean valid = false;
+        if (Objects.equals(oldPassword, activeUser.getPassword()) && Objects.equals(newPassword, newPasswordRepeated) && !newPassword.isEmpty() && !newPasswordRepeated.isEmpty()) {
+            try {
+                activeUser.setPassword(newPasswordRepeated);
+                userService.updateUser(activeUser);
+                RequestContext context = RequestContext.getCurrentInstance();
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Your password was changed successfully!"));
+                RequestContext.getCurrentInstance().update("acceptedMessage");
+                oldPassword = "";
+                newPassword = "";
+                newPasswordRepeated = "";
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Error while trying change password. Probably old password is wrong!"));
+            RequestContext.getCurrentInstance().update("refusedMessage");
+        }
+
+    }
 }

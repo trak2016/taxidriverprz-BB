@@ -27,6 +27,8 @@
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li><p:commandLink type="button" value="Edit profile" onclick="PF('userEdit2').show()"/></li>
+                        <li><p:commandLink type="button" value="Change password" onclick="PF('userPassChange').show()"/>
+                        </li>
                     </ul>
                 </h:form>
                 <f:metadata>
@@ -43,27 +45,17 @@
                                     <h:outputText value="Login"/>
                                 </p:column>
                                 <p:column>
-                                    <p:inputText id="login" value="#{userMB.activeUser.login}" required="true">
-                                        <f:validateLength minimum="3"/>
-                                        <p:ajax event="blur" update="nameMsg"/>
+                                    <p:inputText id="login" value="#{userMB.activeUser.login}" required="true"
+                                                 disabled="true">
                                     </p:inputText>
                                     <p:message id="loginMsg" for="login" display="icon"/>
-                                </p:column>
-                                <p:column>
-                                    <h:outputText value="Password"/>
-                                </p:column>
-                                <p:column>
-                                    <p:inputText id="password" value="#{userMB.activeUser.password}" required="true">
-                                        <f:validateLength minimum="5"/>
-                                        <p:ajax event="blur" update="nameMsg"/>
-                                    </p:inputText>
-                                    <p:message id="passwordMsg" for="password" display="icon"/>
                                 </p:column>
                                 <p:column>
                                     <h:outputText value="Name"/>
                                 </p:column>
                                 <p:column>
-                                    <p:inputText id="name" value="#{userMB.activeUser.name}" required="true">
+                                    <p:inputText id="name" value="#{userMB.activeUser.name}" disabled="true"
+                                                 required="true">
                                         <f:validateLength minimum="3"/>
                                         <p:ajax event="blur" update="nameMsg"/>
                                     </p:inputText>
@@ -73,7 +65,7 @@
                                     <h:outputText value="Last name"/>
                                 </p:column>
                                 <p:column>
-                                    <p:inputText id="lastName" value="#{userMB.activeUser.lastName}"
+                                    <p:inputText id="lastName" value="#{userMB.activeUser.lastName}" disabled="true"
                                                  required="true">
                                         <f:validateLength minimum="3"/>
                                         <p:ajax event="blur" update="lastNameMsg"/>
@@ -94,8 +86,10 @@
                                     <h:outputText value="Date of birthday"/>
                                 </p:column>
                                 <p:column>
-                                    <p:calendar  id="dobEdit" value="#{userMB.activeUser.dob}" required="true"
-                                                requiredMessage="Pick valid date" navigator="true" pattern="dd.MM.yyyy" styleClass="dobClass" />
+                                    <p:calendar id="dobEdit" value="#{userMB.activeUser.dob}" required="true"
+                                                disabled="true"
+                                                requiredMessage="Pick valid date" navigator="true" pattern="dd.MM.yyyy"
+                                                styleClass="dobClass"/>
                                 </p:column>
 
                                 <p:commandButton id="addUser" value="Update" action="#{userMB.editProfile()}"
@@ -106,6 +100,73 @@
                         </h:form>
                     </p:outputPanel>
                 </p:dialog>
+
+                <p:dialog header="Change password" widgetVar="userPassChange" modal="true" showEffect="fade"
+                          hideEffect="fade"
+                          resizable="false">
+                    <p:outputPanel id="userPassChange" style="text-align:center;">
+                        <h:form>
+                            <div style="z-index: 99999!important;left: 50%!important; top: 50%!important;">
+                                <p:growl id="acceptedMessage" showDetail="true"></p:growl>
+                                <p:growl id="refusedMessage" showDetail="true"></p:growl>
+                            </div>
+                            <p:panelGrid columns="2" rendered="true"
+                                         columnClasses="value,value">
+                                <p:column>
+                                    <h:outputText value="Login"/>
+                                </p:column>
+                                <p:column>
+                                    <p:inputText id="loginP" value="#{userMB.activeUser.login}" required="true"
+                                                 disabled="true">
+                                    </p:inputText>
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="Old password"/>
+                                </p:column>
+                                <p:column>
+                                    <p:inputText id="password" type="password" placeholder="Old Password" value="#{userMB.oldPassword}"
+                                                 required="true" validatorMessage="Minimum 5 cahracters.">
+                                        <f:validateLength minimum="5"/>
+                                        <p:ajax event="blur" update="passwordOldMsg"/>
+                                    </p:inputText>
+                                    <p:message id="passwordOldMsg" for="password" display="icon"/>
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="New password"/>
+                                </p:column>
+                                <p:column>
+                                    <p:inputText id="passwordNew" type="password" placeholder="New password"
+                                                 value="#{userMB.newPassword}" required="true"
+                                                 validatorMessage="Minimum 5 cahracters.">
+                                        <f:validateLength minimum="5"/>
+                                        <p:ajax event="blur" update="passwordNewMsg"/>
+                                    </p:inputText>
+                                    <p:message id="passwordNewMsg" for="passwordNew" display="icon"/>
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="Repeat new password"/>
+                                </p:column>
+                                <p:column>
+                                    <p:inputText id="passwordNew2" type="password" placeholder="Repeat new password"
+                                                 value="#{userMB.newPasswordRepeated}" required="true"
+                                                 validatorMessage="Minimum 5 cahracters.">
+                                        <f:validateLength minimum="5"/>
+                                        <p:ajax event="blur" update="passwordNew2Msg"/>
+                                    </p:inputText>
+                                    <p:message id="passwordNew2Msg" for="passwordNew2" display="icon"/>
+                                </p:column>
+
+
+                                <p:commandButton id="changePass" value="Update" action="#{userMB.chnageUserPassword()}"
+                                                 ajax="false"/>
+                                <p:commandButton id="cancelPassChange" value="Cancel"
+                                                 onclick="PF('userPassChange').close()"
+                                                 ajax="false"/>
+                            </p:panelGrid>
+                        </h:form>
+                    </p:outputPanel>
+                </p:dialog>
+
             </div>
         </div>
     </div>
