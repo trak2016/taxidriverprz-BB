@@ -104,6 +104,9 @@ public class MapManagedBean implements Serializable {
         user = navigationRule.loggedUser();
         List<Company> companiesList = companyService.getCompaniesByLoggedUser(user.getLogin());
 
+        //clear current content of cabs List, prevent data duplication
+        cabsList.clear();
+
         for (Company company : companiesList) {
             if (company != null) {
                 cabsList.addAll(userService.getCarsByCompany(company.getId()));
@@ -178,8 +181,12 @@ public class MapManagedBean implements Serializable {
                 mapModel.addOverlay(circle);
             }
         }
-        updateCabs();
-        addMarkers();
+        this.refreshMapNoRender();
+    }
+
+    private void refreshMapNoRender() throws ParserConfigurationException, IOException, SAXException, URISyntaxException {
+        this.addMarkers();
+        this.updateCabs();
     }
 
     public void onMarkerSelect(OverlaySelectEvent event) {
