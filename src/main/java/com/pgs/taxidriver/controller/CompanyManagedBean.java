@@ -89,7 +89,8 @@ public class CompanyManagedBean {
 
     public void deleteCompany() {
         try {
-            companyService.deleteCompany(selectedCompany);
+            selectedCompany.setStatus(false);
+            companyService.updateCompany(selectedCompany);
             // selectedCompany = null;
             resetSelected();
         } catch (Exception e) {

@@ -21,7 +21,7 @@
                             <p:menuitem value="Edit" update="companyEdit" icon="ui-icon-pencil"
                                         oncomplete="PF('companyEdit').show()"/>
                             <p:menuitem value="Delete" update="companies" icon="ui-icon-close"
-                                        actionListener="#{companyMB.updateCompany()}">
+                                        actionListener="#{companyMB.deleteCompany()}">
                                 <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-alert"/>
                             </p:menuitem>
                         </p:contextMenu>

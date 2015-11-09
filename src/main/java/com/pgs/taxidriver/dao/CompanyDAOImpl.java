@@ -40,11 +40,4 @@ public class CompanyDAOImpl extends GenericDAOImpl<Company> implements CompanyDA
         return companies;
     }
 
-    @Override
-    public Company update(Company company) {
-        company.setStatus(false);
-        return this.hibernateTemplate.merge(company);
-
-    }
-
 }
