@@ -6,6 +6,8 @@ import com.pgs.taxidriver.model.User;
 import com.pgs.taxidriver.model.UserRole;
 import com.pgs.taxidriver.service.CompanyService;
 import com.pgs.taxidriver.service.CourseService;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -23,6 +25,9 @@ import java.util.List;
 /**
  * Created by hsadecki on 2015-09-07.
  */
+
+@Setter
+@Getter
 @Component("courseMB")
 @Scope(scopeName = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class CourseManagedBean {
@@ -75,14 +80,6 @@ public class CourseManagedBean {
         this.companyId = "";
     }
 
-    public List<Company> getCompanyList() {
-        return companyList;
-    }
-
-    public void setCompanyList(List<Company> companyList) {
-        this.companyList = companyList;
-    }
-
     public List<Company> getCompaniesByLoggedUser() {
         this.companyList = new ArrayList<Company>();
         try {
@@ -100,31 +97,6 @@ public class CourseManagedBean {
         } else {
             return this.companyList = new ArrayList<Company>();
         }
-    }
-
-    public String getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(String companyId) {
-        if (companyId != null && !companyId.equals("")) {
-            this.companyId = companyId;
-        }
-        else{
-            this.companyId = "";
-        }
-    }
-
-    public List<Course> getCourseList() {
-        return this.courseList;
-    }
-
-    public Course getSelectedCourse() {
-        return selectedCourse;
-    }
-
-    public void setSelectedCourse(Course selectedCourse) {
-        this.selectedCourse = selectedCourse;
     }
 
     public String dataFormater(Date data) throws ParseException {

@@ -5,6 +5,8 @@ import com.pgs.taxidriver.model.Company;
 import com.pgs.taxidriver.model.User;
 import com.pgs.taxidriver.service.CarService;
 import com.pgs.taxidriver.service.UserService;
+import lombok.Getter;
+import lombok.Setter;
 import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.BarChartModel;
@@ -21,6 +23,9 @@ import java.util.List;
 /**
  * Created by akrawczyk on 2015-09-07.
  */
+
+@Setter
+@Getter
 @Component("carMB")
 @Scope(scopeName = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class CarManagedBean {
@@ -55,62 +60,10 @@ public class CarManagedBean {
 
     private Company selectedCompany;
 
-    public List<User> getEmployeeList() {
-        return employeeList;
-    }
-
-    public void setEmployeeList(List<User> employeeList) {
-        this.employeeList = employeeList;
-    }
-
-    public User getSelectedUser() {
-        return selectedUser;
-    }
-
-    public void setSelectedUser(User selectedUser) {
-        this.selectedUser = selectedUser;
-    }
-
-    public void setCarList(List<Car> carList) {
-        this.carList = carList;
-    }
-
-    public List<Car> getCarList() {
-        return carList;
-    }
-
-    public List<Company> getCompanyList() {
-        return this.companyList;
-    }
-
-    public void setCompanyList(List<Company> companyList) {
-        this.companyList = companyList;
-    }
-
-    public Company getSelectedCompany() {
-        return selectedCompany;
-    }
-
-    public void setSelectedCompany(Company selectedCompany) {
-        this.selectedCompany = selectedCompany;
-    }
-
-    public Car getSelectedCar() {
-        return selectedCar;
-    }
-
-    public void setSelectedCar(Car selectedCar) {
+    /* public void setSelectedCar(Car selectedCar) {
         this.selectedCar = selectedCar;
         createMultiAxisModel();
-    }
-
-    public Car getCar() {
-        return this.car;
-    }
-
-    public void setCar(Car someCar) {
-        this.car = someCar;
-    }
+    }*/
 
     @PostConstruct
     void init() {
@@ -181,6 +134,7 @@ public class CarManagedBean {
     }
 
     public BarChartModel getMultiAxisModel() {
+        createMultiAxisModel();
         return categoryChart;
     }
 

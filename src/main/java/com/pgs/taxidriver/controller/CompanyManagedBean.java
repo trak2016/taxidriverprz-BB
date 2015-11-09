@@ -2,6 +2,8 @@ package com.pgs.taxidriver.controller;
 
 import com.pgs.taxidriver.model.Company;
 import com.pgs.taxidriver.service.CompanyService;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -16,6 +18,9 @@ import java.util.List;
 /**
  * Created by kklonowski on 2015-08-31.
  */
+
+@Setter
+@Getter
 @Component("companyMB")
 @Scope(scopeName = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class CompanyManagedBean {
@@ -98,19 +103,4 @@ public class CompanyManagedBean {
         selectedCompany = null;
     }
 
-    public Company getSelectedCompany() {
-        return selectedCompany;
-    }
-
-    public void setSelectedCompany(Company selectedCompany) {
-        this.selectedCompany = selectedCompany;
-    }
-
-    public Company getCompany() {
-        return company;
-    }
-
-    public void setCompany(Company company) {
-        this.company = company;
-    }
 }

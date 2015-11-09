@@ -15,6 +15,8 @@ import com.pgs.taxidriver.service.UserService;
 import com.pgs.taxidriver.utils.CustomComparator;
 import com.pgs.taxidriver.utils.DistanceCalc;
 import com.pgs.taxidriver.utils.XMLParser;
+import lombok.Getter;
+import lombok.Setter;
 import org.primefaces.event.map.GeocodeEvent;
 import org.primefaces.event.map.OverlaySelectEvent;
 import org.primefaces.model.map.*;
@@ -32,7 +34,8 @@ import java.io.Serializable;
 import java.net.URISyntaxException;
 import java.util.*;
 
-
+@Getter
+@Setter
 @Component("mapView")
 @Scope(scopeName = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class MapManagedBean implements Serializable {
@@ -95,9 +98,9 @@ public class MapManagedBean implements Serializable {
         course = new Course();
     }
 
-    public List<Car> getFreeCabsList() {
+  /*  public List<Car> getFreeCabsList() {
         return freeCabsList;
-    }
+    }*/
 
     public MapModel addMarkers() throws URISyntaxException, ParserConfigurationException, SAXException, IOException {
 
@@ -244,7 +247,7 @@ public class MapManagedBean implements Serializable {
 
     }
 
-    public String getData() {
+    /*public String getData() {
         return data;
     }
 
@@ -382,5 +385,5 @@ public class MapManagedBean implements Serializable {
 
     public void setDtime(Double dtime) {
         this.dtime = dtime;
-    }
+    }*/
 }

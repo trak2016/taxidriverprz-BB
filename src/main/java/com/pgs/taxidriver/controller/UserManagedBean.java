@@ -5,6 +5,8 @@ import com.pgs.taxidriver.service.CompanyService;
 import com.pgs.taxidriver.service.RoleService;
 import com.pgs.taxidriver.service.UserRoleService;
 import com.pgs.taxidriver.service.UserService;
+import lombok.Getter;
+import lombok.Setter;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,10 @@ import java.util.stream.Collectors;
 /**
  * Created by jpadjasek on 2015-09-01.
  */
+
+
+@Setter
+@Getter
 @Component("userMB")
 @Scope(scopeName = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class UserManagedBean {
@@ -51,14 +57,6 @@ public class UserManagedBean {
 
     List<User> userList;
 
-    public Set<UserRole> getUserRoles() {
-        return userRoles;
-    }
-
-    public void setUserRoles(Set<UserRole> userRoles) {
-        this.userRoles = userRoles;
-    }
-
     Set<UserRole> userRoles;
 
     private User user;
@@ -69,30 +67,6 @@ public class UserManagedBean {
 
     private User activeUser;
 
-    public String getOldPassword() {
-        return oldPassword;
-    }
-
-    public void setOldPassword(String oldPassword) {
-        this.oldPassword = oldPassword;
-    }
-
-    public String getNewPassword() {
-        return newPassword;
-    }
-
-    public void setNewPassword(String newPassword) {
-        this.newPassword = newPassword;
-    }
-
-    public String getNewPasswordRepeated() {
-        return newPasswordRepeated;
-    }
-
-    public void setNewPasswordRepeated(String newPasswordRepeat) {
-        this.newPasswordRepeated = newPasswordRepeat;
-    }
-
     private String oldPassword;
 
     private String newPassword;
@@ -100,72 +74,15 @@ public class UserManagedBean {
     private String newPasswordRepeated;
 
 
-    public Set<Role> getRoleSet() {
-        return roleSet;
-    }
-
-    public void setRoleSet(Set<Role> roleSet) {
-        this.roleSet = roleSet;
-    }
-
     private Set<Role> roleSet;
 
-    public Company getSelectedCompany() {
-        return selectedCompany;
-    }
-
-
-    public void setSelectedCompany(Company selectedCompany) {
-        this.selectedCompany = selectedCompany;
-    }
-
-    public String getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(String companyId) {
-        this.companyId = companyId;
-    }
 
     String companyId = "";
     private Company selectedCompany;
 
 
-    public Role getSelectedRole() {
-        return selectedRole;
-    }
-
-    public void setSelectedRole(Role selectedRole) {
-        this.selectedRole = selectedRole;
-    }
-
     // String roleId = "";
     Role selectedRole;
-
-    /**
-     * getters and setters
-     */
-
-
-    public Car getCar() {
-        return car;
-    }
-
-    public void setCar(Car car) {
-        this.car = car;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public User getActiveUser() {
-        return activeUser;
-    }
 
     public void setActiveUser() {
         this.activeUser = navigationRule.loggedUser();
@@ -175,14 +92,6 @@ public class UserManagedBean {
     @PostConstruct
     void init() {
         user = new User();
-    }
-
-    public User getSelectedUser() {
-        return selectedUser;
-    }
-
-    public void setSelectedUser(User selectedUser) {
-        this.selectedUser = selectedUser;
     }
 
     /**
@@ -280,16 +189,6 @@ public class UserManagedBean {
         }
     }
 
-    public List<User> getUserList() {
-        List<User> userList = new ArrayList<User>();
-        try {
-            userList = userService.getUsers();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return userList;
-    }
-
     public List<User> getEmployeesByCompany() {
         if (companyId != null && !companyId.equals("")) {
             this.listEmpl = userService.getEmployeesByCompany(Long.parseLong(companyId));
@@ -301,14 +200,6 @@ public class UserManagedBean {
             this.listEmpl = new ArrayList<User>();
         }
         return this.listEmpl;
-    }
-
-    public List<User> getListEmpl() {
-        return listEmpl;
-    }
-
-    public void setListEmpl(List<User> listEmpl) {
-        this.listEmpl = listEmpl;
     }
 
     private List<User> listEmpl;
