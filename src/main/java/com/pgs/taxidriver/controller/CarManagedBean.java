@@ -126,7 +126,8 @@ public class CarManagedBean {
             List<Car> cars = carService.getCarsForAllUserCompanies(navigationRule.loggedUser());
             return cars;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Cannot get cars for logged user: " + navigationRule.loggedUser().getName() + " "
+                    + navigationRule.loggedUser().getLastName() + " (" + navigationRule.loggedUser().getLogin() + ")" + e);
         }
         return null;
     }

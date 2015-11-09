@@ -54,7 +54,7 @@ public class CourseManagedBean {
     public void onStartup() {
         user = navigationRule.loggedUser();
         List<UserRole> userRoles = user.getRoles();
-        if(userRoles.size() == 1 && userRoles.get(0).getRole().getName().equals(("ROLE_DISPATCHER"))) {
+        if (userRoles.size() == 1 && userRoles.get(0).getRole().getName().equals(("ROLE_DISPATCHER"))) {
             this.company = getCompaniesByLoggedUser().get(0);
             this.companyId = String.valueOf(company.getId());
             this.courseList = getCoursesByCompany();
@@ -91,9 +91,10 @@ public class CourseManagedBean {
         this.companyList = new ArrayList<Company>();
         try {
             this.companyList = companyService.getCompaniesByLoggedUser(
-                    SecurityContextHolder.getContext().getAuthentication().getName().toString());
+                    SecurityContextHolder.getContext().getAuthentication().getName());
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error while getting companies by logged user: " + SecurityContextHolder.getContext().getAuthentication().getName()
+                    + "." + e);
         }
 
         if (this.companyList.isEmpty() || this.companyList == null || this.companyList.get(0) == null) {
@@ -113,8 +114,7 @@ public class CourseManagedBean {
     public void setCompanyId(String companyId) {
         if (companyId != null && !companyId.equals("")) {
             this.companyId = companyId;
-        }
-        else{
+        } else {
             this.companyId = "";
         }
     }

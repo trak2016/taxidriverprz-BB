@@ -2,6 +2,8 @@ package com.pgs.taxidriver.dao;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate4.HibernateTemplate;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +17,8 @@ import java.util.List;
  * Created by kklonowski on 2015-09-03.
  */
 public class GenericDAOImpl<T> implements GenericDAO<T> {
+
+    private final static Logger logger = LoggerFactory.getLogger(GenericDAOImpl.class);
 
     @Autowired
     protected HibernateTemplate hibernateTemplate;
@@ -59,7 +63,7 @@ public class GenericDAOImpl<T> implements GenericDAO<T> {
         try {
             obj = session.get(clazz, (Serializable) t);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error while getting object by id" + e);
         }
         if (obj == null) {
             return null;

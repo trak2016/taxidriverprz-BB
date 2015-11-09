@@ -10,6 +10,8 @@ import com.pgs.taxidriver.init.WebApplicationConfig;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -36,6 +38,8 @@ import static org.junit.Assert.assertNotNull;
 @Transactional
 public class CourseManagedBeanTest {
 
+    private final static Logger logger = LoggerFactory.getLogger(CourseManagedBeanTest.class);
+
     @Autowired
     private CourseService courseService = new CourseServiceImpl();
 
@@ -51,8 +55,7 @@ public class CourseManagedBeanTest {
 
     @Test
     @Transactional
-    public void testGetAllSortedByCompany()
-    {
+    public void testGetAllSortedByCompany() {
         //GIVEN
         List<Course> expectedCourseList = new ArrayList<Course>();
 
@@ -61,15 +64,15 @@ public class CourseManagedBeanTest {
 
         //users
         calendar.set(2000, 03, 01);
-        User user1 = new User("Hubert","Sadecki",calendar.getTime(),"12345");
+        User user1 = new User("Hubert", "Sadecki", calendar.getTime(), "12345");
         calendar.set(1997, 01, 01);
-        User user2 = new User("Jan", "Kowalski", calendar.getTime(),"543112");
+        User user2 = new User("Jan", "Kowalski", calendar.getTime(), "543112");
         calendar.set(1999, 12, 01);
-        User user3 = new User("Tomasz", "Nowak", calendar.getTime(),"0700880");
+        User user3 = new User("Tomasz", "Nowak", calendar.getTime(), "0700880");
 
         //company
         Company company = new Company();
-        company.setId((long)3);
+        company.setId((long) 3);
         company.setAddress("Rzeszow");
         company.setLogo(null);
         company.setName("TaxiDriver");
@@ -88,7 +91,7 @@ public class CourseManagedBeanTest {
 
 
         //set Courses
-        calendar.set(2015, 02, 01, 00, 00 ,00);
+        calendar.set(2015, 02, 01, 00, 00, 00);
         Course course1 = new Course(49.21f, 10.01f, user1, calendar.getTime());
         expectedCourseList.add(course1);
         calendar.set(2015, 01, 01, 00, 00, 00);
@@ -106,7 +109,7 @@ public class CourseManagedBeanTest {
     }
 
     @Test
-    public void testDateFormatter(){
+    public void testDateFormatter() {
         CourseManagedBean courseManagedBean = new CourseManagedBean();
         Date date = new Date();
         date.setTime(1994300000);
@@ -114,7 +117,7 @@ public class CourseManagedBeanTest {
             assertNotNull(date);
             assertEquals(courseManagedBean.dataFormater(date), "24/1/1970 02:58");
         } catch (ParseException e) {
-            e.printStackTrace();
+            logger.error("Error while parsing date: " + date + "." + e);
         }
     }
 }

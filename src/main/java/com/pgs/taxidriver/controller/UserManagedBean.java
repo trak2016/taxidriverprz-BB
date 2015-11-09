@@ -232,7 +232,7 @@ public class UserManagedBean {
             userService.addUser(user);
             reset();
         } catch (DataAccessException e) {
-            e.printStackTrace();
+            logger.error("Error while adding new user." + e);
         }
     }
 
@@ -280,7 +280,7 @@ public class UserManagedBean {
             userService.updateUser(selectedUser);
             selectedUser = null;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error while updating user: " + selectedUser.getName() + " " + selectedUser.getLastName() + " - " + selectedUser.getLogin() + "." + e);
         }
     }
 
@@ -289,7 +289,7 @@ public class UserManagedBean {
         try {
             userList = userService.getUsers();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error while getting all users list!" + e);
         }
         return userList;
     }
@@ -326,7 +326,8 @@ public class UserManagedBean {
             userService.updateUser(selectedUser);
             selectedUser = null;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error while deleting user: " + selectedUser.getName() + " " + selectedUser.getLastName() +
+                    " (" + selectedUser.getLogin() + ")." + e);
         }
     }
 
@@ -335,7 +336,7 @@ public class UserManagedBean {
         try {
             userRoleService.deleteUserRole(userRole);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error while deleting user role: " + userRole.getRole() + "." + e);
         }
     }
 
@@ -379,7 +380,7 @@ public class UserManagedBean {
 
         } catch (NoSuchAlgorithmException e) {
 
-            e.printStackTrace();
+            logger.error("Error while hashing password." + e);
         }
         return md5;
     }
@@ -394,7 +395,8 @@ public class UserManagedBean {
             String login = navigationRule.loggedUser().getLogin();
             userCompanies = companyService.getCompaniesByLoggedUser(login);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error while getting user (" + navigationRule.loggedUser().getName() + " " + navigationRule.loggedUser().getLastName() + " - " +
+                    navigationRule.loggedUser().getLogin() + ")companies." + e);
         }
         if (userCompanies.get(0) != null) {
             return userCompanies;
@@ -459,30 +461,27 @@ public class UserManagedBean {
         try {
             userService.updateUser(activeUser);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error while updating user profile: " + activeUser.getName() + " " + activeUser.getLastName() + " (" + activeUser.getLogin() + ")." + e);
         }
     }
 
     public void chnageUserPassword() {
         boolean valid = false;
         if (Objects.equals(oldPassword, activeUser.getPassword()) && Objects.equals(newPassword, newPasswordRepeated) && !newPassword.isEmpty() && !newPasswordRepeated.isEmpty()) {
-            try {
-                activeUser.setPassword(newPasswordRepeated);
-                userService.updateUser(activeUser);
-                RequestContext context = RequestContext.getCurrentInstance();
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Your password was changed successfully!"));
-                RequestContext.getCurrentInstance().update("acceptedMessage");
-                oldPassword = "";
-                newPassword = "";
-                newPasswordRepeated = "";
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+
+            activeUser.setPassword(newPasswordRepeated);
+            userService.updateUser(activeUser);
+            RequestContext context = RequestContext.getCurrentInstance();
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Your password was changed successfully!"));
+            RequestContext.getCurrentInstance().update("acceptedMessage");
+            oldPassword = "";
+            newPassword = "";
+            newPasswordRepeated = "";
+            logger.info("Password for user " + activeUser.getName() + " " + activeUser.getLastName() + " (" + activeUser.getLogin() + ") was change successfully.");
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Error while trying change password. Probably old password is wrong!"));
             RequestContext.getCurrentInstance().update("refusedMessage");
-            logger.info("INFO - Error while trying change password. Probably old password is wrong!");
-            logger.error("ERROR - Error while trying change password. Probably old password is wrong!");
+            logger.error("Error while trying change password. Probably old password is wrong!");
         }
 
     }

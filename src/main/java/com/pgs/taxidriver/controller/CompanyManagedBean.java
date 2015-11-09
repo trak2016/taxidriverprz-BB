@@ -41,7 +41,7 @@ public class CompanyManagedBean {
         try {
             companyList = companyService.getAll();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error while getting list of all companies!" + e);
         }
         return companyList;
     }
@@ -50,9 +50,10 @@ public class CompanyManagedBean {
         List<Company> listOfComapnies = new ArrayList<Company>();
         try {
             listOfComapnies = companyService.getCompaniesByLoggedUser(
-                    SecurityContextHolder.getContext().getAuthentication().getName().toString());
+                    SecurityContextHolder.getContext().getAuthentication().getName());
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error while getting companies by logged user : " + SecurityContextHolder.getContext().getAuthentication().getName()
+                    + "." + e);
         }
         if (listOfComapnies.get(0) != null) {
             return listOfComapnies;
@@ -66,7 +67,7 @@ public class CompanyManagedBean {
             companyService.addCompany(company);
             reset();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error while adding new company (" + company.getName() + ")." + e);
         }
 
     }
@@ -77,7 +78,7 @@ public class CompanyManagedBean {
             // selectedCompany = null;
             resetSelected();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error while updating company (" + selectedCompany.getName() + ")." + e);
         }
     }
 
@@ -87,7 +88,7 @@ public class CompanyManagedBean {
             // selectedCompany = null;
             resetSelected();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error while deleting company (" + selectedCompany.getName() + ")." + e);
         }
 
     }
