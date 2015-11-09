@@ -5,6 +5,8 @@ import com.pgs.taxidriver.model.Company;
 import com.pgs.taxidriver.model.User;
 import com.pgs.taxidriver.service.CarService;
 import com.pgs.taxidriver.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lombok.Getter;
 import lombok.Setter;
 import org.primefaces.model.chart.Axis;
@@ -29,6 +31,8 @@ import java.util.List;
 @Component("carMB")
 @Scope(scopeName = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class CarManagedBean {
+
+    private final static Logger logger = LoggerFactory.getLogger(CarManagedBean.class);
 
     @Autowired
     private CarService carService;
@@ -75,7 +79,8 @@ public class CarManagedBean {
             List<Car> cars = carService.getCarsForAllUserCompanies(navigationRule.loggedUser());
             return cars;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Cannot get cars for logged user: " + navigationRule.loggedUser().getName() + " "
+                    + navigationRule.loggedUser().getLastName() + " (" + navigationRule.loggedUser().getLogin() + ")" + e);
         }
         return null;
     }

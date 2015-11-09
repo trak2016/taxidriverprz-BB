@@ -6,6 +6,8 @@ import com.pgs.taxidriver.model.Company;
 import com.pgs.taxidriver.model.User;
 import com.pgs.taxidriver.service.CompanyService;
 import org.hibernate.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate4.HibernateTemplate;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,8 @@ import java.util.List;
  */
 @Service
 public class UserDAOImpl extends GenericDAOImpl<User> implements UserDAO {
+
+    private final static Logger logger = LoggerFactory.getLogger(UserDAOImpl.class);
 
     @Autowired
     protected HibernateTemplate hibernateTemplate;
@@ -72,7 +76,7 @@ public class UserDAOImpl extends GenericDAOImpl<User> implements UserDAO {
 
             cars.addAll(company.getCars());
         } catch (CompanyNotFound companyNotFound) {
-            companyNotFound.printStackTrace();
+            logger.error("Error while getting cars by company id: " + id + "." + companyNotFound);
         }
 
         return cars;

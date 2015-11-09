@@ -6,6 +6,8 @@ import com.pgs.taxidriver.model.User;
 import com.pgs.taxidriver.model.UserRole;
 import com.pgs.taxidriver.service.CompanyService;
 import com.pgs.taxidriver.service.CourseService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,8 @@ import java.util.List;
 @Scope(scopeName = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class CourseManagedBean {
 
+    private final static Logger logger = LoggerFactory.getLogger(CourseManagedBean.class);
+
     @Autowired
     private CourseService courseService;
 
@@ -55,7 +59,7 @@ public class CourseManagedBean {
     public void onStartup() {
         user = navigationRule.loggedUser();
         List<UserRole> userRoles = user.getRoles();
-        if(userRoles.size() == 1 && userRoles.get(0).getRole().getName().equals(("ROLE_DISPATCHER"))) {
+        if (userRoles.size() == 1 && userRoles.get(0).getRole().getName().equals(("ROLE_DISPATCHER"))) {
             this.company = getCompaniesByLoggedUser().get(0);
             this.companyId = String.valueOf(company.getId());
             this.courseList = getCoursesByCompany();
@@ -84,9 +88,10 @@ public class CourseManagedBean {
         this.companyList = new ArrayList<Company>();
         try {
             this.companyList = companyService.getCompaniesByLoggedUser(
-                    SecurityContextHolder.getContext().getAuthentication().getName().toString());
+                    SecurityContextHolder.getContext().getAuthentication().getName());
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error while getting companies by logged user: " + SecurityContextHolder.getContext().getAuthentication().getName()
+                    + "." + e);
         }
 
         if (this.companyList.isEmpty() || this.companyList == null || this.companyList.get(0) == null) {
@@ -128,6 +133,15 @@ public class CourseManagedBean {
             this.courseList = new ArrayList<Course>();
         }
         return this.courseList;
+    }
+
+    public void setCompanyId(String companyId) {
+        if (companyId != null && !companyId.equals("")) {
+            this.companyId = companyId;
+        }
+        else{
+            this.companyId = "";
+        }
     }
 
 }

@@ -2,6 +2,8 @@ package com.pgs.taxidriver.converter;
 
 
 import org.hibernate.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate4.HibernateTemplate;
 import org.springframework.stereotype.Component;
@@ -21,6 +23,8 @@ import java.lang.reflect.Field;
 @Component("entityConverter")
 @SessionScoped
 public class EntityConverter implements Converter {
+
+    private final static Logger logger = LoggerFactory.getLogger(EntityConverter.class);
 
     @Autowired
     private HibernateTemplate hibernateTemplate;
@@ -55,7 +59,7 @@ public class EntityConverter implements Converter {
                 }
             }
         } catch (IllegalArgumentException | IllegalAccessException e) {
-            e.printStackTrace();
+            logger.error("Error while getting object as string." + e);
         }
         return null;
     }
