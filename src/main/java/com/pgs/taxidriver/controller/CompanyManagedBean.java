@@ -2,6 +2,8 @@ package com.pgs.taxidriver.controller;
 
 import com.pgs.taxidriver.model.Company;
 import com.pgs.taxidriver.service.CompanyService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -19,6 +21,8 @@ import java.util.List;
 @Component("companyMB")
 @Scope(scopeName = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class CompanyManagedBean {
+
+    private final static Logger logger = LoggerFactory.getLogger(CompanyManagedBean.class);
 
     @Autowired
     private CompanyService companyService;

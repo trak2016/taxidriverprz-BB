@@ -7,6 +7,8 @@ import com.pgs.taxidriver.service.UserRoleService;
 import com.pgs.taxidriver.service.UserService;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -33,6 +35,8 @@ import java.util.stream.Collectors;
 @Component("userMB")
 @Scope(scopeName = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class UserManagedBean {
+
+    private final static Logger logger = LoggerFactory.getLogger(UserManagedBean.class);
 
     @Autowired
     private RoleService roleService;
@@ -477,6 +481,8 @@ public class UserManagedBean {
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Error while trying change password. Probably old password is wrong!"));
             RequestContext.getCurrentInstance().update("refusedMessage");
+            logger.info("INFO - Error while trying change password. Probably old password is wrong!");
+            logger.error("ERROR - Error while trying change password. Probably old password is wrong!");
         }
 
     }

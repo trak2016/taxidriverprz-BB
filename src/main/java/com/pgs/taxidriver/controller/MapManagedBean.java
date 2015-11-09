@@ -18,6 +18,8 @@ import com.pgs.taxidriver.utils.XMLParser;
 import org.primefaces.event.map.GeocodeEvent;
 import org.primefaces.event.map.OverlaySelectEvent;
 import org.primefaces.model.map.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -36,6 +38,8 @@ import java.util.*;
 @Component("mapView")
 @Scope(scopeName = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class MapManagedBean implements Serializable {
+
+    private final static Logger logger = LoggerFactory.getLogger(MapManagedBean.class);
 
     @Autowired
     private DistanceCalc distanceCalc;

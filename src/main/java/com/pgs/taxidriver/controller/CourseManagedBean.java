@@ -6,6 +6,8 @@ import com.pgs.taxidriver.model.User;
 import com.pgs.taxidriver.model.UserRole;
 import com.pgs.taxidriver.service.CompanyService;
 import com.pgs.taxidriver.service.CourseService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -26,6 +28,8 @@ import java.util.List;
 @Component("courseMB")
 @Scope(scopeName = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class CourseManagedBean {
+
+    private final static Logger logger = LoggerFactory.getLogger(CourseManagedBean.class);
 
     @Autowired
     private CourseService courseService;
