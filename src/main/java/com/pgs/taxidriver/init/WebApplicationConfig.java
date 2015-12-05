@@ -1,5 +1,6 @@
 package com.pgs.taxidriver.init;
 
+import com.pgs.taxidriver.hello.WebSocketConfig;
 import com.pgs.taxidriver.model.*;
 import com.pgs.taxidriver.model.Role;
 import org.flywaydb.core.Flyway;
@@ -25,7 +26,7 @@ import javax.annotation.Resource;
 @PropertySource("classpath:application.properties")
 @ComponentScan(basePackages = {"com.pgs.taxidriver"}, excludeFilters = {@ComponentScan.Filter(type = FilterType.ANNOTATION,
         value = Configuration.class)})
-@Import({SecurityConfig.class})
+@Import({SecurityConfig.class, WebSocketConfig.class})
 public class WebApplicationConfig extends WebMvcConfigurerAdapter {
 
     @Resource
