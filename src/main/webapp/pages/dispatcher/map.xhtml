@@ -15,7 +15,7 @@
                         <h:panelGrid columns="4" style="margin-bottom:10px" cellpadding="5" columnClasses="centered,centered,centered,centered">
                             <p:outputLabel for="address" value="Address: "/>
                             <p:inputText id="address"/>
-                            <p:commandButton value="Search" icon="ui-icon-search" onclick="geocode()" type="button"/>
+                            <p:commandButton value="Search" icon="ui-icon-search" onclick="geocode()" type="button" update="freeCabId"/>
                             <p:ajaxStatus>
                                 <f:facet name="start">
                                     <h:graphicImage library="image" name="load.gif" />
@@ -41,7 +41,7 @@
                                 <br/>
                                 <h:outputText value="#{mapView.marker.data}"/>
                                 <br/>
-                                <p:commandButton  value="Add course" update="courseDetail" icon="ui-icon-search"
+                                <p:commandButton rendered="#{mapView.selectedCar.getStatus()==false}"  value="Add course" update="courseDetail" icon="ui-icon-search"
                                                   oncomplete="PF('courseDialog').show()"/>
                             </p:gmapInfoWindow>
                         </p:gmap>
@@ -78,7 +78,7 @@
                     </h:panelGrid>
                 </p:panel>
             
-            <h:form rendered="#{mapView.searched}">
+            <h:form id="freeCabId" ><!--rendered="#{mapView.searched}">-->
                 <p:panel id="pn2" header="Car list" style="margin-bottom:10px;min-width: 1200px;">
                     <h:panelGrid columns="1" cellpadding="20">
                         <p:contextMenu for="free_cabs">
@@ -133,7 +133,9 @@
                                 <f:facet name="header">
                                     <h:outputText value="Arivval time"/>
                                 </f:facet>
-                                <h:outputText value="#{car.time}"/>
+                                <h:outputText value="#{car.time * 100}">
+                                    <f:convertNumber pattern="#0" />
+                                </h:outputText>
                             </p:column>
 
                         </p:dataTable>

@@ -17,6 +17,7 @@ import com.pgs.taxidriver.utils.DistanceCalc;
 import com.pgs.taxidriver.utils.XMLParser;
 import lombok.Getter;
 import lombok.Setter;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.map.GeocodeEvent;
 import org.primefaces.event.map.OverlaySelectEvent;
 import org.primefaces.model.map.*;
@@ -189,6 +190,7 @@ public class MapManagedBean implements Serializable {
             }
         }
         this.refreshMapNoRender();
+        RequestContext.getCurrentInstance().update("freeCabId");
     }
 
     private void refreshMapNoRender() throws ParserConfigurationException, IOException, SAXException, URISyntaxException {
