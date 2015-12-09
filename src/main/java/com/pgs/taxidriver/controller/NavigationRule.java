@@ -21,7 +21,7 @@ import java.net.URISyntaxException;
  */
 @Component("navRule")
 @Scope(scopeName = WebApplicationContext.SCOPE_APPLICATION, proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class NavigationRule implements Serializable {
+public class NavigationRule {
 
     @Autowired
     UserService userService;

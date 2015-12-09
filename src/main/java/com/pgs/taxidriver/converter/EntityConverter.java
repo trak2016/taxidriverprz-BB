@@ -24,7 +24,7 @@ import java.lang.reflect.Field;
 @SessionScoped
 public class EntityConverter implements Converter {
 
-    private final static Logger logger = LoggerFactory.getLogger(EntityConverter.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(EntityConverter.class);
 
     @Autowired
     private HibernateTemplate hibernateTemplate;
@@ -40,6 +40,7 @@ public class EntityConverter implements Converter {
             return session.get(Class.forName(split[0]), Long.valueOf(split[1]));
             //return em.find(Class.forName(split[0]), Long.valueOf(split[1]));
         } catch (NumberFormatException | ClassNotFoundException e) {
+            LOGGER.error("An error occured while converting String to an Object", e);
             return null;
         }
     }
@@ -59,7 +60,7 @@ public class EntityConverter implements Converter {
                 }
             }
         } catch (IllegalArgumentException | IllegalAccessException e) {
-            logger.error("Error while getting object as string." + e);
+            LOGGER.error("Error while getting object as string." + e);
         }
         return null;
     }
