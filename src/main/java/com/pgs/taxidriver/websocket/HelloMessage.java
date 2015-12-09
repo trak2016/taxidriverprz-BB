@@ -1,4 +1,4 @@
-package com.pgs.taxidriver.hello;
+package com.pgs.taxidriver.websocket;
 
 public class HelloMessage {
 

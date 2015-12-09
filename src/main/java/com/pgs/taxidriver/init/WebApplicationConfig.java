@@ -1,6 +1,6 @@
 package com.pgs.taxidriver.init;
 
-import com.pgs.taxidriver.hello.WebSocketConfig;
+import com.pgs.taxidriver.websocket.WebSocketConfig;
 import com.pgs.taxidriver.model.*;
 import com.pgs.taxidriver.model.Role;
 import org.flywaydb.core.Flyway;

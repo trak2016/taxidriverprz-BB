@@ -1,10 +1,10 @@
-package com.pgs.taxidriver.hello;
+package com.pgs.taxidriver.websocket;
 
-public class Greeting {
+public class Message {
     
     private String content;
 
-    public Greeting(String content) {
+    public Message(String content) {
         this.content = content;
     }
 
