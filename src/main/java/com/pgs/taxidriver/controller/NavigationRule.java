@@ -13,7 +13,6 @@ import org.xml.sax.SAXException;
 import javax.faces.context.FacesContext;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.io.Serializable;
 import java.net.URISyntaxException;
 
 /**

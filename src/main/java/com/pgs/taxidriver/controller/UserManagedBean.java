@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
 @Scope(scopeName = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class UserManagedBean {
 
-    private final static Logger logger = LoggerFactory.getLogger(UserManagedBean.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserManagedBean.class);
 
     @Autowired
     private RoleService roleService;
@@ -80,13 +80,13 @@ public class UserManagedBean {
 
     private Set<Role> roleSet;
 
-
     String companyId = "";
+
     private Company selectedCompany;
 
-
-    // String roleId = "";
     Role selectedRole;
+
+    private List<User> listEmpl;
 
     public void setActiveUser() {
         this.activeUser = navigationRule.loggedUser();
@@ -141,7 +141,7 @@ public class UserManagedBean {
             userService.addUser(user);
             reset();
         } catch (DataAccessException e) {
-            logger.error("Error while adding new user." + e);
+            LOGGER.error("Error while adding new user." + e);
         }
     }
 
@@ -189,7 +189,7 @@ public class UserManagedBean {
             userService.updateUser(selectedUser);
             selectedUser = null;
         } catch (Exception e) {
-            logger.error("Error while updating user: " + selectedUser.getName() + " " + selectedUser.getLastName() + " - " + selectedUser.getLogin() + "." + e);
+            LOGGER.error("Error while updating user: " + selectedUser.getName() + " " + selectedUser.getLastName() + " - " + selectedUser.getLogin() + "." + e);
         }
     }
 
@@ -198,7 +198,7 @@ public class UserManagedBean {
         try {
             userList = userService.getUsers();
         } catch (Exception e) {
-            logger.error("Error while getting all users list!" + e);
+            LOGGER.error("Error while getting all users list!" + e);
         }
         return userList;
     }
@@ -216,8 +216,6 @@ public class UserManagedBean {
         return this.listEmpl;
     }
 
-    private List<User> listEmpl;
-
     /**
      * delete user from the data base
      */
@@ -227,7 +225,7 @@ public class UserManagedBean {
             userService.updateUser(selectedUser);
             selectedUser = null;
         } catch (Exception e) {
-            logger.error("Error while deleting user: " + selectedUser.getName() + " " + selectedUser.getLastName() +
+            LOGGER.error("Error while deleting user: " + selectedUser.getName() + " " + selectedUser.getLastName() +
                     " (" + selectedUser.getLogin() + ")." + e);
         }
     }
@@ -237,7 +235,7 @@ public class UserManagedBean {
         try {
             userRoleService.deleteUserRole(userRole);
         } catch (Exception e) {
-            logger.error("Error while deleting user role: " + userRole.getRole() + "." + e);
+            LOGGER.error("Error while deleting user role: " + userRole.getRole() + "." + e);
         }
     }
 
@@ -281,7 +279,7 @@ public class UserManagedBean {
 
         } catch (NoSuchAlgorithmException e) {
 
-            logger.error("Error while hashing password." + e);
+            LOGGER.error("Error while hashing password." + e);
         }
         return md5;
     }
@@ -296,7 +294,7 @@ public class UserManagedBean {
             String login = navigationRule.loggedUser().getLogin();
             userCompanies = companyService.getCompaniesByLoggedUser(login);
         } catch (Exception e) {
-            logger.error("Error while getting user (" + navigationRule.loggedUser().getName() + " " + navigationRule.loggedUser().getLastName() + " - " +
+            LOGGER.error("Error while getting user (" + navigationRule.loggedUser().getName() + " " + navigationRule.loggedUser().getLastName() + " - " +
                     navigationRule.loggedUser().getLogin() + ")companies." + e);
         }
         if (userCompanies.get(0) != null) {
@@ -362,7 +360,7 @@ public class UserManagedBean {
         try {
             userService.updateUser(activeUser);
         } catch (Exception e) {
-            logger.error("Error while updating user profile: " + activeUser.getName() + " " + activeUser.getLastName() + " (" + activeUser.getLogin() + ")." + e);
+            LOGGER.error("Error while updating user profile: " + activeUser.getName() + " " + activeUser.getLastName() + " (" + activeUser.getLogin() + ")." + e);
         }
     }
 
@@ -378,11 +376,11 @@ public class UserManagedBean {
             oldPassword = "";
             newPassword = "";
             newPasswordRepeated = "";
-            logger.info("Password for user " + activeUser.getName() + " " + activeUser.getLastName() + " (" + activeUser.getLogin() + ") was change successfully.");
+            LOGGER.info("Password for user " + activeUser.getName() + " " + activeUser.getLastName() + " (" + activeUser.getLogin() + ") was change successfully.");
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Error while trying change password. Probably old password is wrong!"));
             RequestContext.getCurrentInstance().update("refusedMessage");
-            logger.error("Error while trying change password. Probably old password is wrong!");
+            LOGGER.error("Error while trying change password. Probably old password is wrong!");
         }
 
     }

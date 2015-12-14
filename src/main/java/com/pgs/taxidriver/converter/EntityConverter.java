@@ -24,7 +24,7 @@ import java.lang.reflect.Field;
 @SessionScoped
 public class EntityConverter implements Converter {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(EntityConverter.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(EntityConverter.class);
 
     @Autowired
     private HibernateTemplate hibernateTemplate;
@@ -38,7 +38,6 @@ public class EntityConverter implements Converter {
             String[] split = string.split(":");
             this.session = hibernateTemplate.getSessionFactory().getCurrentSession();
             return session.get(Class.forName(split[0]), Long.valueOf(split[1]));
-            //return em.find(Class.forName(split[0]), Long.valueOf(split[1]));
         } catch (NumberFormatException | ClassNotFoundException e) {
             LOGGER.error("An error occured while converting String to an Object", e);
             return null;

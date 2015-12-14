@@ -32,7 +32,6 @@ import org.xml.sax.SAXException;
 import javax.annotation.PostConstruct;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.io.Serializable;
 import java.net.URISyntaxException;
 import java.util.*;
 
@@ -42,7 +41,7 @@ import java.util.*;
 @Scope(scopeName = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class MapManagedBean {
 
-    private final static Logger logger = LoggerFactory.getLogger(MapManagedBean.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MapManagedBean.class);
 
     @Autowired
     private DistanceCalc distanceCalc;

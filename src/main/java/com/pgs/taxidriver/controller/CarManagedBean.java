@@ -32,7 +32,7 @@ import java.util.List;
 @Scope(scopeName = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class CarManagedBean {
 
-    private final static Logger logger = LoggerFactory.getLogger(CarManagedBean.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CarManagedBean.class);
 
     @Autowired
     private CarService carService;
@@ -64,11 +64,6 @@ public class CarManagedBean {
 
     private Company selectedCompany;
 
-    /* public void setSelectedCar(Car selectedCar) {
-        this.selectedCar = selectedCar;
-        createMultiAxisModel();
-    }*/
-
     @PostConstruct
     void init() {
         car = new Car();
@@ -76,10 +71,9 @@ public class CarManagedBean {
 
     public List<Car> getCarsForUserCompanies() {
         try {
-            List<Car> cars = carService.getCarsForAllUserCompanies(navigationRule.loggedUser());
-            return cars;
+            return carService.getCarsForAllUserCompanies(navigationRule.loggedUser());
         } catch (Exception e) {
-            logger.error("Cannot get cars for logged user: " + navigationRule.loggedUser().getName() + " "
+            LOGGER.error("Cannot get cars for logged user: " + navigationRule.loggedUser().getName() + " "
                     + navigationRule.loggedUser().getLastName() + " (" + navigationRule.loggedUser().getLogin() + ")" + e);
         }
         return null;
@@ -92,7 +86,6 @@ public class CarManagedBean {
     public void addCar() {
         User companyOwner = selectedUser;
         car.setDriver(companyOwner);
-        System.out.println(selectedCompany.getName());
         car.setCompany(selectedCompany);
         car.setStatus(false);
         car.setLatitude(0.0);
@@ -128,11 +121,6 @@ public class CarManagedBean {
         car.setYearOfProd(null);
         car.setDriver(null);
         car.setCompany(null);
-        /*
-         * RequestContext context = RequestContext.class; context.execute("document.getElementById("myForm").reset()");
-         * <---- maybe try this way?
-         */
-        // RequestContext.getCurrentInstance().reset("addCarForm");
         selectedCar = null;
         selectedCompany = null;
         selectedUser = null;
