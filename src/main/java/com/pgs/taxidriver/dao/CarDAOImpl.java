@@ -134,4 +134,10 @@ public class CarDAOImpl extends GenericDAOImpl<Car> implements CarDAO {
         Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
         session.merge(car);
     }
+
+    @Override
+    public Car getCarByUserId(Long id) {
+        Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
+        return (Car) session.createQuery("from Car c where c.driver.id=?").setParameter(0, id).list().get(0);
+    }
 }

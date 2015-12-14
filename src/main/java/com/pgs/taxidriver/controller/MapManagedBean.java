@@ -84,6 +84,7 @@ public class MapManagedBean implements Serializable {
     private User user;
     private Double dtime;
     private List<Car> sortedFreeCabsList = new ArrayList<>();
+    private String address;
 
 
     @PostConstruct
@@ -154,6 +155,7 @@ public class MapManagedBean implements Serializable {
 
     public void onGeocode(GeocodeEvent event) throws ParserConfigurationException, IOException, SAXException, URISyntaxException {
         List<GeocodeResult> results = event.getResults();
+        this.address = results.get(0).getAddress();
 
         mapModel.getCircles().clear();
         mapModel.getMarkers().clear();

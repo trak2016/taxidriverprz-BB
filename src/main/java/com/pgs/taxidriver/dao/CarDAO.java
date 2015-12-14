@@ -29,4 +29,6 @@ public interface CarDAO extends GenericDAO<Car> {
     public List<Car> getCarsForAllUserCompanies(User user);
 
     public void addCar(Car car);
+
+    Car getCarByUserId(Long id);
 }

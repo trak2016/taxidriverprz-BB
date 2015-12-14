@@ -9,7 +9,6 @@
 <f:view>
     <ui:composition template="/templates/default/main.xhtml">
         <ui:define name="content">
-
                 <p:panel id="pnl" header="Map" style="margin-bottom:10px;min-width: 1200px;">
                     <h:panelGrid columns="1" width="100%" cellpadding="20">
                         <h:panelGrid columns="4" style="margin-bottom:10px" cellpadding="5" columnClasses="centered,centered,centered,centered">
@@ -26,7 +25,6 @@
                                 </f:facet>
                             </p:ajaxStatus>
                         </h:panelGrid>
-
                         <p:growl id="messages" showDetail="true"/>
 
                         <p:gmap id="geoGmap" widgetVar="geoMap" center="#{mapView.centerMap}" zoom="13" type="ROADMAP"
@@ -77,9 +75,15 @@
                         </p:dialog>
                     </h:panelGrid>
                 </p:panel>
-            
+
             <h:form id="freeCabId" ><!--rendered="#{mapView.searched}">-->
                 <p:panel id="pn2" header="Car list" style="margin-bottom:10px;min-width: 1200px;">
+                    <h:panelGrid columns="3" cellpadding="20">
+                        <h:outputText value="Client phone number: "/>
+                        <h:inputText id="clientPhoneNumber" value="#{webSocket.clientPhoneNumber}"/>
+                        <p:commandButton value="Testowe wysylanie socketu" id="websocketrequest"
+                                        actionListener="#{webSocket.addcourse()}" styleClass="ui-priority-primary" />
+                    </h:panelGrid>
                     <h:panelGrid columns="1" cellpadding="20">
                         <p:contextMenu for="free_cabs">
                             <p:menuitem value="Add course" update="courseDetail" icon="ui-icon-search"

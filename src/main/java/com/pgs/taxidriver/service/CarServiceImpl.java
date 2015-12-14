@@ -70,4 +70,10 @@ public class CarServiceImpl implements CarService {
     public Car getCarByPlateNumer(String plateNumber) {
         return carDAO.getCarByPlateNumer(plateNumber);
     }
+
+    @Transactional
+    @Override
+    public Car getCarByUserId(Long id){
+        return carDAO.getCarByUserId(id);
+    }
 }

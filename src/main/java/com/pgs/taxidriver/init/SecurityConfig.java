@@ -24,7 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/pages/owner**/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER')")
                 .antMatchers("/pages/dispatcher**/**").access(
                 "hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER') or hasRole('ROLE_DISPATCHER')")
-                .antMatchers("/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER') or hasRole('ROLE_DISPATCHER')")
+                .antMatchers("/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_OWNER') or hasRole('ROLE_DISPATCHER') or hasRole('ROLE_DRIVER')")
                 .anyRequest()
                 .fullyAuthenticated()
                 .and()

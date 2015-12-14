@@ -31,4 +31,6 @@ public interface CarService {
     Car getCarByPlateNumer(String plateNumber);
 
     List<Car> getCarsForAllUserCompanies(User loggedUser);
+
+    Car getCarByUserId(Long id);
 }
