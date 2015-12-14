@@ -34,7 +34,7 @@ import java.util.List;
 @Scope(scopeName = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class CourseManagedBean {
 
-    private final static Logger logger = LoggerFactory.getLogger(CourseManagedBean.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CourseManagedBean.class);
 
     @Autowired
     private CourseService courseService;
@@ -56,18 +56,18 @@ public class CourseManagedBean {
 
     private UserRole userRole;
 
+    @Autowired
+    private CompanyService companyService;
+
     public void onStartup() {
         user = navigationRule.loggedUser();
         List<UserRole> userRoles = user.getRoles();
-        if (userRoles.size() == 1 && userRoles.get(0).getRole().getName().equals(("ROLE_DISPATCHER"))) {
+        if (userRoles.size() == 1 && userRoles.get(0).getRole().getName().equals("ROLE_DISPATCHER")) {
             this.company = getCompaniesByLoggedUser().get(0);
             this.companyId = String.valueOf(company.getId());
             this.courseList = getCoursesByCompany();
         }
     }
-
-    @Autowired
-    private CompanyService companyService;
 
     @PostConstruct
     public void init() {
@@ -90,7 +90,7 @@ public class CourseManagedBean {
             this.companyList = companyService.getCompaniesByLoggedUser(
                     SecurityContextHolder.getContext().getAuthentication().getName());
         } catch (Exception e) {
-            logger.error("Error while getting companies by logged user: " + SecurityContextHolder.getContext().getAuthentication().getName()
+            LOGGER.error("Error while getting companies by logged user: " + SecurityContextHolder.getContext().getAuthentication().getName()
                     + "." + e);
         }
 

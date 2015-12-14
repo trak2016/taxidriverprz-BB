@@ -1,6 +1,8 @@
 package com.pgs.taxidriver.utils;
 
 import org.primefaces.model.map.LatLng;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -30,6 +32,9 @@ public class XMLParser {
     // be URL-encoded. In practice, you will likely have code
     // which assembles your URL from user or web service input
     // and plugs those values into its parameters.
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(XMLParser.class);
+
     private static final String DISTANCE_REQUEST_PREFIX = "https://maps.googleapis.com/maps/api/distancematrix/xml?";
 
     // Note: The default XPath expression "/" selects
@@ -99,8 +104,8 @@ public class XMLParser {
 
         try {
             result = (NodeList) xpath.evaluate(xPathString, xml, XPathConstants.NODESET);
-        } catch (XPathExpressionException ex) {
-            // Deal with it
+        } catch (XPathExpressionException e) {
+            LOGGER.error("An error occured while processing list of nodes", e);
         }
         return result;
     }

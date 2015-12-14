@@ -1,7 +1,6 @@
 package com.pgs.taxidriver.dao;
 
 import com.pgs.taxidriver.model.Company;
-import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,14 +29,11 @@ public class CompanyDAOImpl extends GenericDAOImpl<Company> implements CompanyDA
     @Override
     public List<Company> getCompaniesByLoggedUser(String login) {
         Session session = hibernateTemplate.getSessionFactory().getCurrentSession();
-
-        List<Company> companies =
-                session
-                        .createQuery(
-                                "SELECT c from Company c right join c.owners uc right join uc.user u where u.login=? and c.status=true")
-                        .setParameter(0, login)
-                        .list();
-        return companies;
+        return session
+                .createQuery(
+                        "SELECT c from Company c right join c.owners uc right join uc.user u where u.login=? and c.status=true")
+                .setParameter(0, login)
+                .list();
     }
 
 }

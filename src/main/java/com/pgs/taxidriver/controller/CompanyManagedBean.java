@@ -27,7 +27,7 @@ import java.util.List;
 @Scope(scopeName = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class CompanyManagedBean {
 
-    private final static Logger logger = LoggerFactory.getLogger(CompanyManagedBean.class);
+    private static final  Logger LOGGER = LoggerFactory.getLogger(CompanyManagedBean.class);
 
     @Autowired
     private CompanyService companyService;
@@ -46,7 +46,7 @@ public class CompanyManagedBean {
         try {
             companyList = companyService.getAll();
         } catch (Exception e) {
-            logger.error("Error while getting list of all companies!" + e);
+            LOGGER.error("Error while getting list of all companies!" + e);
         }
         return companyList;
     }
@@ -57,7 +57,7 @@ public class CompanyManagedBean {
             listOfComapnies = companyService.getCompaniesByLoggedUser(
                     SecurityContextHolder.getContext().getAuthentication().getName());
         } catch (Exception e) {
-            logger.error("Error while getting companies by logged user : " + SecurityContextHolder.getContext().getAuthentication().getName()
+            LOGGER.error("Error while getting companies by logged user : " + SecurityContextHolder.getContext().getAuthentication().getName()
                     + "." + e);
         }
         if (listOfComapnies.get(0) != null) {
@@ -72,7 +72,7 @@ public class CompanyManagedBean {
             companyService.addCompany(company);
             reset();
         } catch (Exception e) {
-            logger.error("Error while adding new company (" + company.getName() + ")." + e);
+            LOGGER.error("Error while adding new company (" + company.getName() + ")." + e);
         }
 
     }
@@ -80,10 +80,9 @@ public class CompanyManagedBean {
     public void updateCompany() {
         try {
             companyService.updateCompany(selectedCompany);
-            // selectedCompany = null;
             resetSelected();
         } catch (Exception e) {
-            logger.error("Error while updating company (" + selectedCompany.getName() + ")." + e);
+            LOGGER.error("Error while updating company (" + selectedCompany.getName() + ")." + e);
         }
     }
 
@@ -91,10 +90,9 @@ public class CompanyManagedBean {
         try {
             selectedCompany.setStatus(false);
             companyService.updateCompany(selectedCompany);
-            // selectedCompany = null;
             resetSelected();
         } catch (Exception e) {
-            logger.error("Error while deleting company (" + selectedCompany.getName() + ")." + e);
+            LOGGER.error("Error while deleting company (" + selectedCompany.getName() + ")." + e);
         }
 
     }

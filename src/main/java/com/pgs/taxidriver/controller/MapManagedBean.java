@@ -32,7 +32,6 @@ import org.xml.sax.SAXException;
 import javax.annotation.PostConstruct;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.io.Serializable;
 import java.net.URISyntaxException;
 import java.util.*;
 
@@ -40,9 +39,9 @@ import java.util.*;
 @Setter
 @Component("mapView")
 @Scope(scopeName = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class MapManagedBean implements Serializable {
+public class MapManagedBean {
 
-    private final static Logger logger = LoggerFactory.getLogger(MapManagedBean.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MapManagedBean.class);
 
     @Autowired
     private DistanceCalc distanceCalc;
@@ -90,7 +89,6 @@ public class MapManagedBean implements Serializable {
         mapModel = new DefaultMapModel();
         centerMap = "50.0397667,21.999881";
         searched = false;
-        //mapModel = addMarkers();
         course = new Course();
 
     }
@@ -101,10 +99,6 @@ public class MapManagedBean implements Serializable {
         mapModel = addMarkers();
         course = new Course();
     }
-
-  /*  public List<Car> getFreeCabsList() {
-        return freeCabsList;
-    }*/
 
     public MapModel addMarkers() throws URISyntaxException, ParserConfigurationException, SAXException, IOException {
 
@@ -257,144 +251,4 @@ public class MapManagedBean implements Serializable {
         selectedCar = null;
 
     }
-
-    /*public String getData() {
-        return data;
-    }
-
-    public void setData(String data) {
-        this.data = data;
-    }
-
-    public MapModel getMapModel() {
-        return mapModel;
-    }
-
-    public void setMapModel(MapModel mapModel) {
-        this.mapModel = mapModel;
-    }
-
-    public List<Car> getCabsList() {
-        return cabsList;
-    }
-
-    public void setCabsList(List<Car> carList) {
-        this.cabsList = carList;
-    }
-
-    public boolean isSearched() {
-        return searched;
-    }
-
-    public void setSearched(boolean searched) {
-        this.searched = searched;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
-    public LatLng getDestination() {
-        return destination;
-    }
-
-    public void setDestination(LatLng destination) {
-        this.destination = destination;
-    }
-
-    public Marker getMarker() {
-        return marker;
-    }
-
-    public void setMarker(Marker marker) {
-        this.marker = marker;
-    }
-
-    public String getCenterMap() {
-        return centerMap;
-    }
-
-    public void setCenterMap(String centerMap) {
-        this.centerMap = centerMap;
-    }
-
-    public LatLng getOrigin() {
-        return origin;
-    }
-
-    public void setOrigin(LatLng origin) {
-        this.origin = origin;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Course getCourse() {
-        return course;
-    }
-
-    public void setCourse(Course course) {
-        this.course = course;
-    }
-
-    public double getDistance() {
-        return distance;
-    }
-
-    public void setDistance(double distance) {
-        this.distance = distance;
-    }
-
-    public List<Marker> getFreeCabsMarkerList() {
-        return freeCabsMarkerList;
-    }
-
-    public void setFreeCabsMarkerList(List<Marker> freeCabsMarkerList) {
-        this.freeCabsMarkerList = freeCabsMarkerList;
-    }
-
-    public void setFreeCabsList(List<Car> freeCabsList) {
-        this.freeCabsList = freeCabsList;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Car getSelectedCar() {
-        return selectedCar;
-    }
-
-    public void setSelectedCar(Car selectedCar) {
-        this.selectedCar = selectedCar;
-    }
-
-    public List<Car> getSortedFreeCabsList() {
-        return sortedFreeCabsList;
-    }
-
-    public void setSortedFreeCabsList(List<Car> sortedFreeCabsList) {
-        this.sortedFreeCabsList = sortedFreeCabsList;
-    }
-
-    public Double getDtime() {
-        return dtime;
-    }
-
-    public void setDtime(Double dtime) {
-        this.dtime = dtime;
-    }*/
 }
