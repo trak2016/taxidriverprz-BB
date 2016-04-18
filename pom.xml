@@ -155,7 +155,6 @@
             <version>19.0-rc1</version>
         </dependency>
 
-
         <dependency>
             <groupId>org.glassfish.web</groupId>
             <artifactId>el-impl</artifactId>
