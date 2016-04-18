@@ -9,17 +9,17 @@ import java.util.Set;
 @Entity
 public class Company {
     @Id
-    private Long id;
-    private String name;
-    private String phone;
-    private String address;
-    private String logo;
-    private Boolean status;
-    private String vat_id;
-    private String country;
-    private String city;
-    private String zip;
-    private Set<Car> cars;
+//    private Long id;
+//    private String name;
+//    private String phone;
+//    private String address;
+//    private String logo;
+//    private Boolean status;
+//    private String vat_id;
+//    private String country;
+//    private String city;
+//    private String zip;
+//    private Set<Car> cars;
     private Set<UserCompany> owners;
     public Company() {
 
